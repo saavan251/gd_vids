@@ -16,6 +16,18 @@ router.post('/userslogin', passport.authenticate('userlogin', {
     failureRedirect: '/users/signin'
 }));
 
+/*router.post('/userslogin', passport.authenticate('userlogin',{
+	failureRedirect: '/users/signin'}),function(req,res){
+	console.log(req.user);
+	res.redirect('/users/index');
+});*/
+
+router.get('/logout', function(req, res) {
+	req.logout();
+	req.session.destroy();
+	res.redirect('/');
+})
+
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }

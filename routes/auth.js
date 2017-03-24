@@ -14,13 +14,15 @@ var router = express.Router();
 
 
 passport.serializeUser(function(user,done){
-	console.log('serializing user..');
+	console.log('serializing user..'+user);
 	done(null,user.nick);
 });
 
 passport.deserializeUser(function(obj,done){
 	console.log('deserialising '+obj);
-	done(null,obj);
+	users.findOne({ 'nick' :  obj },function(err, user) {
+	done(err, user);
+});
 });
 
 
