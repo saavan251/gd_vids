@@ -23,8 +23,13 @@ router.get('/signin', function(req, res, next) {
 });
 
 router.get('/index',function(req,res,next){
-	//console.log(req.query.token);
+	if(!req.user) {
+		res.redirect('/signin');
+	}
+	else {
+		//console.log(req.query.token);
 	res.render('users/index',{ username: req.user.nick});
+	}
 })
 
 
