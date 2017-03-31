@@ -14,6 +14,8 @@ var fs = require('fs');
 var flash = require ('connect-flash');
 var mongoosesession = require('mongoose-session');
 
+utrutrutkfk
+
 mongoose.connect('mongodb://127.0.0.1/gamedrone');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
