@@ -27,7 +27,12 @@
     <span class="psw">Forgot <a href="#">password?</a></span>
   </div>
   <div class="message" >
-    {{message}}
+    {% if success.length>0 %}
+    {{success[0]}}
+    {% endif %}
+    {% if error.length>0 %}
+    {{error[0]}}
+    {% endif %}
   </div>
 </form>
 </div>

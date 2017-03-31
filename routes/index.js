@@ -8,12 +8,13 @@ var users = mongoose.model('users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Gamedrone' });
+  res.render('index');
 });
 
 router.post('/userslogin', passport.authenticate('userlogin', {
     successRedirect: '/users/index',
-    failureRedirect: '/users/signin'
+    failureRedirect: '/users/signin',
+    failureFlash: true
 }));
 
 /*router.post('/userslogin', passport.authenticate('userlogin',{

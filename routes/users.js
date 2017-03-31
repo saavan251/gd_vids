@@ -4,6 +4,7 @@ var router = express.Router();
 var passport = require('./auth.js');
 var mongoose = require('mongoose');
 var fs = require('fs');
+var flash = require('connect-flash');
 
 
 //models
@@ -15,19 +16,22 @@ router.get('/', function(req, res, next) {
 });
 router.get('/signin', function(req, res, next) {
 	if(!req.user){
-		res.render('signin',{message : ""});
+		//req.flash('error','Please Sign in');
+		res.render('signin',{error : req.flash('error'), success: req.flash('success')});
 	}
     else{
-    	res.render('users/index',{ username: req.user.nick});
+    	res.redirect('/users/index');
+    	//res.render('users/index',{ username: req.user.nick});
     }
 });
 
 router.get('/index',function(req,res,next){
 	if(!req.user) {
-		res.redirect('/signin');
+		res.redirect('/users/signin');
 	}
 	else {
-		//console.log(req.query.token);
+		console.log(req.session);
+		console.log(req.user," req.user");
 	res.render('users/index',{ username: req.user.nick});
 	}
 })

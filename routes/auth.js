@@ -21,6 +21,7 @@ passport.serializeUser(function(user,done){
 passport.deserializeUser(function(obj,done){
 	console.log('deserialising '+obj);
 	users.findOne({ 'nick' :  obj },function(err, user) {
+
 	done(err, user);
 });
 });
@@ -75,8 +76,9 @@ passport.use('userlogin',new LocalStrategy(
                 /*if(!user._login){
                     return done(null, false, { message: 'Login Disabled for this user.Contact Admin for support.' });
                 }*/
-                else 
+                else {
                 return done(null, user);
+            }
             }
         );
 
