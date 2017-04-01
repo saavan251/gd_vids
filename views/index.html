@@ -1,124 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <title>WELCOME TO GAMEDRONE</title> 
-    <meta name="description" content="gamedrone app">
-    <link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/>
-    
-</head>
-<body> 
-   <nav class="navbar navbar-inverse navbar-fixed-top " id="my-navbar">
-      <div class="navbar-inner">
+{% extends '../views/nav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
+    <link rel="stylesheet" type="text/css" href="/css/extra.css">
+ {% endblock%} 
 
-         <div class="container col-lg-9 col-md-9 col-sm-9 col-xs-12 col-lg-offset-2">
-            <div class="navbar-header">
+ {% block contents %}
+ {% parent %}
+          <div class="jumbotron">
+                   <div class="container text-center">
+                       <h1>Welcome to Gamedrone</h1>
+                       <p>You can watch your favourite  videos, movies and tv series without downloading from  DC.
+                       </p>
+                    </div>                 
+                       
 
-            <a href="" class="navbar-brand">Gamedrone</a>
-            <a href="" class="navbar-brand">Latest Contents</a>
-            <a href="" class="navbar-brand">About</a>
-
-            </div>
-             <ul class="nav navbar-nav navbar-right ">
-             <a style='margin-top: 9px; margin-right: 5px;'  role="button" data-toggle="modal" class="btn btn-large btn-danger pull-right" href="/users/signin">Login</a>
-             <a style='margin-top: 9px; margin-right: 5px;'  role="button" data-toggle="modal" class="btn btn-large btn-danger pull-right" href="http://172.16.86.222/dchub/register">Register</a></ul>
-             <form class="navbar-form navbar-right">
-                  <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Search">
-                  </div>
-                  <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-            </form> 
-         </div>
-       </div>  
-    </nav> 
-
-     <div class="jumbotron">
-             <div class="container text-center">
-                 <h1>Welcome to Gamedrone</h1>
-                 <p>You can watch your favourite  videos, movies and tv series without downloading from  DC.
-                 </p>
-              </div>                 
-                 
-
-        </div>
+              </div>
 
 
 
 
 
-        <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12">
-  <div class="col-sm-12 col-md-6 col-xs-12">
-    <div class="panel panel-default" >
-      <div class="panel-heading"><center>RECENT CONTENTS</center></div>
-    <div class="panel-body" id="panel">
-      <div class="table-responsive">          
-          <table class="table table-bordered">
-            <thead>
-              <!--<tr>
-                
-                <th style="width:90%"></th>
-                <th style="width:10%"></th>
-              </tr>-->
-            </thead>
-            <tbody>
-              <tr>
-                <td><form action="http://192.168.118.164/vidserve/v1.mp4"><button type="submit" class="list-group-item">v1.mp4</button>
-                </form></td>
-                <td>vid_size</td>
-              </tr>
-              <tr>
-                <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
-                </form></td>
-                <td>vid_size</td>
-              </tr>
-              <tr>
-                <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
-                </form></td>
-                <td>vid_size</td>
-              </tr>
-            </tbody>
-          </table>
+              <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12">
+        <div class="col-sm-12 col-md-6 col-xs-12">
+          <div class="panel panel-default" >
+            <div class="panel-heading"><center>RECENT CONTENTS</center></div>
+          <div class="panel-body" id="panel">
+            <div class="table-responsive">          
+                <table class="table table-bordered">
+                  <thead>
+                    <!--<tr>
+                      
+                      <th style="width:90%"></th>
+                      <th style="width:10%"></th>
+                    </tr>-->
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><form action="http://192.168.118.164/vidserve/v1.mp4"><button type="submit" class="list-group-item">v1.mp4</button>
+                      </form></td>
+                      <td>vid_size</td>
+                    </tr>
+                    <tr>
+                      <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
+                      </form></td>
+                      <td>vid_size</td>
+                    </tr>
+                    <tr>
+                      <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
+                      </form></td>
+                      <td>vid_size</td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+
+               <!--<div class="list-group">
+                t<button type="button" class="list-group-item">Cras justo odio</button>
+                <button type="button" class="list-group-item">Dapibus ac facilisis in</button>
+                <button type="button" class="list-group-item">Morbi leo risus</button>
+                <button type="button" class="list-group-item">Porta ac consectetur ac</button>
+                <button type="button" class="list-group-item">Vestibulum at eros</button>
+              </div>-->
           </div>
-
-         <!--<div class="list-group">
-          t<button type="button" class="list-group-item">Cras justo odio</button>
-          <button type="button" class="list-group-item">Dapibus ac facilisis in</button>
-          <button type="button" class="list-group-item">Morbi leo risus</button>
-          <button type="button" class="list-group-item">Porta ac consectetur ac</button>
-          <button type="button" class="list-group-item">Vestibulum at eros</button>
-        </div>-->
-    </div>
-    </div>
-  </div>
-  <div class="col-sm-12 col-md-6 col-xs-12">
-      <div class="panel panel-default">
-        <div class="panel-heading"><center>TOP TEN VIDEOS</center></div>
-         <div class="table-responsive">          
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              
-              <th><center>NICK</center></th>
-              <th><center>URL</center></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>sharer1</td>
-              <td><button type="button" class="list-group-item">Cras justo odio</button></td>
-            </tr>
-          </tbody>
-        </table>
+          </div>
         </div>
+        <div class="col-sm-12 col-md-6 col-xs-12">
+            <div class="panel panel-default">
+              <div class="panel-heading"><center>TOP TEN VIDEOS</center></div>
+               <div class="table-responsive">          
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    
+                    <th><center>NICK</center></th>
+                    <th><center>URL</center></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>sharer1</td>
+                    <td><button type="button" class="list-group-item">Cras justo odio</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
       </div>
-    </div>
-</div>
-
-
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>    
-</body> 
-</html> 
-    
+  {% endblock%} 
