@@ -1,4 +1,4 @@
- /* Bordered form */
+/* Bordered form */
 form {
     border: 3px solid #f1f1f1;
     width:25%;
@@ -31,7 +31,7 @@ button:hover {
 }
 
 .main{
-    margin: 25px auto;
+    margin: 100px auto;
     position: relative;
 }
 
@@ -57,7 +57,7 @@ img.avatar {
 
 /* Add padding to containers */
 .container {
-    padding: 16px;
+    padding: 0px;
 }
 
 .message{
