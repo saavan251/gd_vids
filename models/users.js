@@ -18,9 +18,9 @@ var userSchema = new Schema({
 		type: String,
 		required: false
 	},
-	altEmail:{
+	ip:{
 		type: String,
-		unique : false,
+		required: false
 	},
 	lastLogin: {
 		type: String,
@@ -31,9 +31,9 @@ var userSchema = new Schema({
 		type: String,
 		required: false,
 	},
-	_login:{
+	is_sharer:{
 		type:Boolean,
-		default:true
+		default:false
 	},
 });
 module.exports = mongoose.model('users', userSchema);

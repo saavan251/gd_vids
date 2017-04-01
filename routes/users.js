@@ -17,6 +17,15 @@ var users = mongoose.model('users');
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
+
+router.use(function(req, res, next) {
+	if(!req.user) {
+		res.render('signin',{error : req.flash('error'), success: req.flash('success')});
+	}
+	else
+  		next();
+});
+
 router.get('/signin', function(req, res, next) {
 	if(!req.user){
 		//req.flash('error','Please Sign in');
@@ -26,6 +35,12 @@ router.get('/signin', function(req, res, next) {
     	res.redirect('/users/index');
     	//res.render('users/index',{ username: req.user.nick});
     }
+});
+
+router.get('/index',function(req,res,next){
+	console.log(req.session);
+	console.log(req.user," req.user");
+	res.render('users/index',{ username: req.user.nick});
 });
 
 //password forget and reset
@@ -96,16 +111,27 @@ router.post('/passupdate', function(req, res, next) {
 
 });
 
-router.get('/index',function(req,res,next){
-	if(!req.user) {
-		res.redirect('/users/signin');
-	}
-	else {
-		console.log(req.session);
-		console.log(req.user," req.user");
-	res.render('users/index',{ username: req.user.nick});
-	}
-})
+router.post('/editprofile', function(req, res) {
+	var username = req.user.nick;
+	var fullname = req.user.full_name;
+	var ip = req.user.ip;
+	if(req.body.fullname.length>0)
+		fullname = req.body.fullname;
+	if(req.body.ip)
+		ip = req.body.ip;
+	users.update( {'nick': username},{
+		$set: {'full_name': fullname, 'ip': ip} },function(err, doc){
+		if(err){
+			console.log(err);
+			req.flash('error', 'update failure due to some internal error' );
+			res.render('success',{error : req.flash('error'), success: req.flash('success')})
+		}
+		else{
+			req.flash('success', 'updation successful' );
+			res.render('success',{error : req.flash('error'), success: req.flash('success')})
+		}
+	});
+});
 
 
 var createHash = function(password){

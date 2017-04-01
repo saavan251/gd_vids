@@ -9,7 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 <style>
-.container{
+.heading{
   display: flex;
   content: space-between;
   margin: 2% auto;
@@ -21,17 +21,47 @@
 <body>
 </br></br></br></br>
 <div class="container">
-	<h3>If you have forgot your password or u want to change your password please go to <a href="http://172.16.86.222/dchub">dc hub</a> and then fill in your nick and password here to update</h3>
+	<h3>If you want to change your password please go to <a href="http://172.16.86.222/dchub">dc hub</a> and then fill in your updated password here</h3>
 </div>
 
-	  <form class="form-horizontal" action="/users/passupdate" method="post">
+<form class="form-horizontal" action="/users/passupdate" method="post">
   <div class="form-group">
   	<div class="col-sm-offset-1" >
-    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-    <div class="col-sm-4">
-      <input class="form-control" id="inputPassword3" type="password" placeholder="Password" name="password" required> 
+      <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+      <div class="col-sm-4">
+        <input class="form-control" id="inputPassword3" type="password" placeholder="Password" name="password" required> 
+      </div>
     </div>
-</div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-5">
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </div>
+</form>
+</br>
+
+<form class="form-horizontal" action="/users/editprofile" method="post">
+  <div class="form-group">
+    <div class="col-sm-offset-1" >
+      <label for="name" class="col-sm-2 control-label">Full name</label>
+      <div class="col-sm-4">
+        <input class="form-control" id="name" placeholder="full name" name="fullname"> 
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-offset-3">
+        <input type="checkbox" id="issharer" onclick="if (this.checked){ document.getElementById('ip').disabled=false;}
+        if(!this.checked) {document.getElementById('ip').disabled=true;} "/>
+        <span><label><p>I am a sharer</p></label></span>
+  </div> 
+    <div class="col-sm-offset-1" >
+      <label for="ip" class="col-sm-2 control-label">IP Address</label>
+      <div class="col-sm-4">
+        <input class="form-control" id="ip" placeholder="IP" name="ip" disabled requierd> 
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-5">
@@ -42,11 +72,9 @@
 
 
 
-
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<!--<script src="../js/jquery-3.2.0.js"></script>
-	<script src="../js/bootstrap.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--<script src="../js/jquery-3.2.0.js"></script>
+<script src="../js/bootstrap.js"></script>-->
 </body>
 </html>
