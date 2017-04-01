@@ -33,11 +33,18 @@ router.get('/forgot',function(req, res, next){
 	res.render('users/forgot');
 });
 
+router.get('/settings', function( req, res, next){
+	//console.log(req.user.nick+' user -------------------');
+	res.render('users/settings');
+});
+
 //update password to synchronise with dchub
 router.post('/passupdate', function(req, res, next) {
 	//console.log(req);
 	//res.send(req.body);
-	var username = req.body.username;
+	//console.log(req.body);
+	//console.log("---------------")
+	var username = req.user.nick;
 	var password = req.body.password;
 	users.findOne( { 'nick' : username},function(err, user) {
 		console.log(moment());
