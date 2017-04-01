@@ -44,7 +44,7 @@ passport.use('userlogin',new LocalStrategy(
 					}
 					else{
 						if(body.error && body.error.length>0){
-							done(null, false, { message: 'Incorrect Password. Please try again.' });
+						return done(null, false, { message: 'Incorrect Password. Please try again.' });
 						//res.render('signin',{message : body.error});
 						}	
 						else{

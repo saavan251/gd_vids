@@ -7,7 +7,8 @@ var userSchema = new Schema({
 	},
 	nick:{
 		type: String,
-		required: true
+		required: true,
+		unique: true
 	},
 	level:{
 		type: Number,
