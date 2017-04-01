@@ -50,7 +50,9 @@ router.get('/forgot',function(req, res, next){
 
 router.get('/settings', function( req, res, next){
 	//console.log(req.user.nick+' user -------------------');
-	res.render('users/settings');
+	console.log('---------------');
+	console.log(req.user);
+	res.render('users/settings', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 });
 
 //update password to synchronise with dchub
@@ -65,12 +67,11 @@ router.post('/passupdate', function(req, res, next) {
 		console.log(moment());
             if (err) {
             	req.flash('error',err);
-            	res.render('success',{error : req.flash('error'), success: req.flash('success')})
-
+            	res.redirect('settings');
             }
             else if(!user) {
             	req.flash('error', 'sorry you have not registered.');
-            	res.render('success',{error : req.flash('error'), success: req.flash('success')})
+            	res.redirect('settings');
             }
             else {
             	var url="http://172.16.86.222:13000/login?nick="+username+"&password="+password+"&secret=qwerty";
@@ -80,12 +81,12 @@ router.post('/passupdate', function(req, res, next) {
 					if(err){
 						console.log(err);
 						req.flash('error', 'some internal error has occured');
-            			res.render('success',{error : req.flash('error'), success: req.flash('success')})
+            			res.redirect('settings');
 					}
 					else{
 						if(body.error && body.error.length>0){
 							req.flash('error', 'Incorrect Password. Please try again.' );
-            				res.render('success',{error : req.flash('error'), success: req.flash('success')})
+            				res.redirect('settings');
 						//res.render('signin',{message : body.error});
 						}	
 						else{
@@ -94,11 +95,11 @@ router.post('/passupdate', function(req, res, next) {
 								if(err){
 									console.log(err);
 									req.flash('error', 'update failure due to some internal error' );
-            						res.render('success',{error : req.flash('error'), success: req.flash('success')})
+            						res.redirect('settings');
 								}
 								else{
 									req.flash('success', 'updation successful' );
-            						res.render('success',{error : req.flash('error'), success: req.flash('success')})
+            						res.redirect('settings');
 								}
 							});
 						}
@@ -124,11 +125,11 @@ router.post('/editprofile', function(req, res) {
 		if(err){
 			console.log(err);
 			req.flash('error', 'update failure due to some internal error' );
-			res.render('success',{error : req.flash('error'), success: req.flash('success')})
+			res.redirect('settings');
 		}
 		else{
 			req.flash('success', 'updation successful' );
-			res.render('success',{error : req.flash('error'), success: req.flash('success')})
+			res.redirect('settings');
 		}
 	});
 });

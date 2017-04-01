@@ -15,61 +15,75 @@
   margin: 2% auto;
   padding: 0% 5% 2% 5%;
 }
+.message{
+  color: red;
+  margin: 5% 0% 1% auto;
+}
 </style>
 </head>
 
 <body>
-</br></br></br></br>
-<div class="container">
-	<h3>If you want to change your password please go to <a href="http://172.16.86.222/dchub">dc hub</a> and then fill in your updated password here</h3>
+<div class="message" >
+  {% if success.length>0 %}
+  <h4><center>{{success[0]}}</center></h4>
+  {% endif %}
+  {% if error.length>0 %}
+  <h4><center>{{error[0]}}</center></h4>
+  {% endif %}
 </div>
-
+<div class="container">
+	<h4><center>If you want to change your password please go to <a href="http://172.16.86.222/dchub">dc hub</a> and then fill in your updated password here</center><h4>
+</div>
+</br>
 <form class="form-horizontal" action="/users/passupdate" method="post">
   <div class="form-group">
-  	<div class="col-sm-offset-1" >
+  	<div class="col-sm-offset-3" >
       <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-      <div class="col-sm-4">
-        <input class="form-control" id="inputPassword3" type="password" placeholder="Password" name="password" required> 
+      <div class="col-sm-5">
+        <input class="form-control" id="inputPassword3" type="password" placeholder="Sync Password with dc" name="password" required> 
       </div>
     </div>
   </div>
   <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-5">
+    <div class="col-sm-offset-5 col-sm-5">
       <button type="submit" class="btn btn-primary">Update</button>
     </div>
   </div>
 </form>
 </br>
 
+<div class="container">
+  <h4><center>Update profile data</center><h4>
+</div>    
+
 <form class="form-horizontal" action="/users/editprofile" method="post">
   <div class="form-group">
-    <div class="col-sm-offset-1" >
+    <div class="col-sm-offset-3" >
       <label for="name" class="col-sm-2 control-label">Full name</label>
-      <div class="col-sm-4">
-        <input class="form-control" id="name" placeholder="full name" name="fullname"> 
+      <div class="col-sm-5">
+        <input class="form-control" id="name" placeholder='{{userdata.full_name}}' name="fullname"> 
       </div>
     </div>
   </div>
   <div class="form-group">
-    <div class="col-md-offset-3">
+    <div class="col-md-offset-5">
         <input type="checkbox" id="issharer" onclick="if (this.checked){ document.getElementById('ip').disabled=false;}
         if(!this.checked) {document.getElementById('ip').disabled=true;} "/>
         <span><label><p>I am a sharer</p></label></span>
   </div> 
-    <div class="col-sm-offset-1" >
+    <div class="col-sm-offset-3" >
       <label for="ip" class="col-sm-2 control-label">IP Address</label>
-      <div class="col-sm-4">
-        <input class="form-control" id="ip" placeholder="IP" name="ip" disabled requierd> 
+      <div class="col-sm-5">
+        <input class="form-control" id="ip" placeholder='{{userdata.ip}}' name="ip" disabled requierd> 
       </div>
     </div>
   </div>
   <div class="form-group">
-    <div class="col-sm-offset-4 col-sm-5">
+    <div class="col-sm-offset-5 col-sm-5">
       <button type="submit" class="btn btn-primary">Update</button>
     </div>
   </div>
 </form>
-
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
