@@ -27,7 +27,11 @@ router.get('/logout', function(req, res) {
 	req.logout();
 	req.session.destroy();
 	res.redirect('/');
-})
+});
+
+router.get('/success', function(req, res) {
+	res.render('success', {error : req.flash('error'), success: req.flash('success')});
+});
 
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
