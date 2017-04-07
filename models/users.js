@@ -10,10 +10,6 @@ var userSchema = new Schema({
 		required: true,
 		unique: true
 	},
-	level:{
-		type: Number,
-		required:false
-	},
 	email:{
 		type: String,
 		required: false
@@ -31,9 +27,21 @@ var userSchema = new Schema({
 		type: String,
 		required: false,
 	},
-	is_sharer:{
+	issharer:{
 		type:Boolean,
 		default:false
 	},
+	upvoted:[{
+			type: Schema.Types.ObjectId,
+			ref: 'videos'
+	}],
+	downvoted:[{
+			type: Schema.Types.ObjectId,
+			ref: 'videos'
+	}],
+	videos:[{
+			type: Schema.Types.ObjectId,
+			ref: 'videos'
+	}]
 });
 module.exports = mongoose.model('users', userSchema);

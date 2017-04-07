@@ -8,85 +8,98 @@
 
  {% block contents %}
  {% parent %}
-          <div class="jumbotron">
-                   <div class="container text-center">
-                       <h1>Welcome to Gamedrone</h1>
-                       <p>You can watch your favourite  videos, movies and tv series without downloading from  DC.
-                       </p>
-                    </div>                 
-                       
-
-              </div>
+    <div class="jumbotron">
+       <div class="container text-center">
+           <h1>Welcome to Gamedrone</h1>
+           <p>You can watch your favourite  videos, movies and tv series without downloading from  DC.
+           </p>
+        </div>                 
+      </div>
 
 
 
 
 
-              <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12">
-        <div class="col-sm-12 col-md-6 col-xs-12">
-          <div class="panel panel-default" >
-            <div class="panel-heading"><center>RECENT CONTENTS</center></div>
+  <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12">
+    <div class="col-sm-12 col-md-6 col-xs-12">
+      <div class="panel panel-default" >
+        <div class="panel-heading"><center>RECENT CONTENTS</center></div>
           <div class="panel-body" id="panel">
             <div class="table-responsive">          
+              <table class="table table-bordered">
+                <thead>
+              <!--<tr>
+                
+                <th style="width:90%"></th>
+                <th style="width:10%"></th>
+              </tr>-->
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><form action="http://192.168.118.164:3000/videos/get?_id=58e30cf411f05a9ba9105875"><button type="submit" class="list-group-item">big video</button>
+                    </form></td>
+                    <td>vid_size</td>
+                  </tr>
+                  <tr>
+                    <td><form action="http://192.168.118.164:3000/videos/get?_id=58e30d4311f05a9ba9105876"><button type="submit" class="list-group-item">small video</button>
+                    </form></td>
+                    <td>vid_size</td>
+                  </tr>
+                  <tr>
+                    <td><form action="http://192.168.0.100/videos/watch/58e30cf411f05a9ba9105875"><button type="submit" class="list-group-item">big video :id</button>
+                    </form></td>
+                    <td>vid_size</td>
+                  </tr>
+                  <tr>
+                    <td><form action="http://192.168.118.164:3000/videos/get/58e32d4511f05a9ba9105878"><button type="submit" class="list-group-item">shirley setia localhost</button>
+                    </form></td>
+                    <td>vid_size</td>
+                  </tr>
+                  <tr>
+                    <td><form action="http://192.168.118.164:3000/videos/get/58e4557c672c65a46febc38d"><button type="submit" class="list-group-item">ek mulakat xampp</button>
+                    </form></td>
+                    <td>vid_size</td>
+                  </tr>
+                  <tr>
+                    <td><form action="http://192.168.118.164:3000/videos/get/58e4559c672c65a46febc38e"><button type="submit" class="list-group-item">shirley setia xampp</button>
+                    </form></td>
+                    <td>vid_size</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+                 <!--<div class="list-group">
+                  t<button type="button" class="list-group-item">Cras justo odio</button>
+                  <button type="button" class="list-group-item">Dapibus ac facilisis in</button>
+                  <button type="button" class="list-group-item">Morbi leo risus</button>
+                  <button type="button" class="list-group-item">Porta ac consectetur ac</button>
+                  <button type="button" class="list-group-item">Vestibulum at eros</button>
+                </div>-->
+            </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6 col-xs-12">
+              <div class="panel panel-default">
+                <div class="panel-heading"><center>TOP TEN VIDEOS</center></div>
+                 <div class="table-responsive">          
                 <table class="table table-bordered">
                   <thead>
-                    <!--<tr>
+                    <tr>
                       
-                      <th style="width:90%"></th>
-                      <th style="width:10%"></th>
-                    </tr>-->
+                      <th><center>NICK</center></th>
+                      <th><center>URL</center></th>
+                    </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td><form action="http://192.168.118.164/vidserve/v1.mp4"><button type="submit" class="list-group-item">v1.mp4</button>
-                      </form></td>
-                      <td>vid_size</td>
-                    </tr>
-                    <tr>
-                      <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
-                      </form></td>
-                      <td>vid_size</td>
-                    </tr>
-                    <tr>
-                      <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
-                      </form></td>
-                      <td>vid_size</td>
+                      <td>sharer1</td>
+                      <td><button type="button" class="list-group-item">Cras justo odio</button></td>
                     </tr>
                   </tbody>
                 </table>
                 </div>
-
-               <!--<div class="list-group">
-                t<button type="button" class="list-group-item">Cras justo odio</button>
-                <button type="button" class="list-group-item">Dapibus ac facilisis in</button>
-                <button type="button" class="list-group-item">Morbi leo risus</button>
-                <button type="button" class="list-group-item">Porta ac consectetur ac</button>
-                <button type="button" class="list-group-item">Vestibulum at eros</button>
-              </div>-->
-          </div>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-xs-12">
-            <div class="panel panel-default">
-              <div class="panel-heading"><center>TOP TEN VIDEOS</center></div>
-               <div class="table-responsive">          
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    
-                    <th><center>NICK</center></th>
-                    <th><center>URL</center></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>sharer1</td>
-                    <td><button type="button" class="list-group-item">Cras justo odio</button></td>
-                  </tr>
-                </tbody>
-              </table>
               </div>
             </div>
-          </div>
-      </div>
+        </div>
   {% endblock%} 

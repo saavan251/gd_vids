@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var videoSchema = new Schema({
-	title:{
+	tth: {
 		type: String,
 		required: true
 	},
@@ -17,14 +17,32 @@ var videoSchema = new Schema({
 		type: Number,
 		default : 0
 	},
-	description:{
+	users:[{
+		_userid:{
+			type: Schema.Types.ObjectId,
+			ref: 'users'
+		},
+		title:{
+			type: String,
+			required: false
+		},
+		description:{
+			type: String,
+			required: false
+		},
+		url: {
+			type: String,
+			required: false
+		},
+		version: {
+			type: Number,
+			required: false,
+			default : 0
+		}
+	}],
+	format: {
 		type: String,
-		required: false
-	},
-	urls: {
-		type: [String],
-		required: false
+		required: true
 	}
-
 });
 module.exports = mongoose.model('videos', videoSchema);

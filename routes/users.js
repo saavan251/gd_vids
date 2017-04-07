@@ -12,6 +12,7 @@ var moment = require('moment');
 
 //models
 var users = mongoose.model('users');
+var videos = mongoose.model('videos');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -40,7 +41,7 @@ router.get('/signin', function(req, res, next) {
 router.get('/index',function(req,res,next){
 	console.log(req.session);
 	console.log(req.user," req.user");
-	res.render('users/index',{ username: req.user.nick});
+	res.render('users/index',{ userdata: req.user});
 });
 
 //password forget and reset
@@ -50,8 +51,8 @@ router.get('/forgot',function(req, res, next){
 
 router.get('/settings', function( req, res, next){
 	//console.log(req.user.nick+' user -------------------');
-	console.log('---------------');
-	console.log(req.user);
+	//console.log('---------------');
+	//console.log(req.user);
 	res.render('users/settings', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 });
 
@@ -112,7 +113,7 @@ router.post('/passupdate', function(req, res, next) {
 
 });
 
-router.post('/editprofile', function(req, res) {
+router.post('/editprofile', function(req, res, next) {
 	var username = req.user.nick;
 	var fullname = req.user.full_name;
 	var ip = req.user.ip;
@@ -134,7 +135,102 @@ router.post('/editprofile', function(req, res) {
 	});
 });
 
+router.post('/refresh', function(req, res, next) {
+	var ip = req.user.ip;
+	var url="http://"+ip+"/vidserve/list.html";
+	//console.log(url);
+	request.get(url, function(err, httpres, body){
+		var array = body.split('"');
+		var data = array[1].split('$');
+		if(err){
+			console.log(err);
+			req.flash('error', 'some internal error in refreshing file');
+			res.redirect('settings');
+		}
+		else{
+			for (i in data){
+				updateeach(data[i], req.user, array, req, res);
+			}
+			req.flash('success', 'successfully refreshed the file');
+			res.redirect('settings');
+		}
+	});
 
+});
+
+var updateeach = function(data, user,array, req, res){
+	var elem=data.split(',');
+	//console.log(elem[0]);
+	//console.log(elem[1]);
+	var userid = user._id;
+	videos.findOne({'tth': elem[1]}).populate('users._userid').exec( function(err, video){
+		console.log(elem[1]);
+		console.log('+++++++++++');
+		if(err){
+			console.log(err);
+			req.flash('error', 'some internal error in refreshing file');
+			res.redirect('settings');
+		}
+		else if(!video){
+			console.log("$$$$$$$$$$$$$$$$$");
+			var video = new videos({
+				tth: elem[1],
+				format: elem[0].split('.')[1],
+				users: [{
+					_userid: userid,
+					title: elem[0].split('.')[0],
+					url: '/vidserve/'+elem[0],
+					version: parseInt(array[0])
+				}]
+			}) ;
+			video.save(function(err, video){
+				if(err){
+					console.log(err);
+					req.flash('error', 'some internal error in adding new video '+ elem[1]);
+					res.redirect('settings');
+				}
+				console.log('updated'+ elem[0]);
+			});
+		}
+		else{
+			var flag=1;
+			console.log('6666666666');
+			for(var j=0; j<video.users.length; j++){
+				if (JSON.stringify(video.users[j]._userid._id)== JSON.stringify(userid) ) {
+					
+					flag=0;   
+	                videos.update({"_id": video._id, "users._userid": userid}, 
+					{$set: {"users.$.title": elem[0].split('.')[0],
+					"users.$.version": parseInt(array[0]),
+					"users.$.url": "/vidserve/"+elem[0]	
+				}}).exec();
+	            	req.flash('success', 'successful');
+	            }
+			}
+			if(flag == 1){
+			    videos.update(
+				{'_id' : video._id},{
+		            $push:{ 
+		                'users': {
+		                    _userid: userid,
+							title: elem[0].split('.')[0],
+							url: '/vidserve/'+elem[0],
+							version: parseInt(array[0])
+		                }
+		            } 
+		        }, function(err){
+	                if(err){
+	                	console.log(err);
+						req.flash('error', 'some internal error in adding new user to found vidoe '+ elem[1]);
+						res.redirect('settings');
+	                }
+	            });
+			}
+		}
+		//console.log('------------');
+	});
+
+}
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
