@@ -198,6 +198,32 @@ router.post('/refresh', function(req, res, next) {
 
 });
 
+router.post('/search',function(req,res){
+	console.log("++++++++++++++++++");
+	console.log(req.body);
+	var title =req.body.title;
+	videos.find({$or:[
+		          {title: new RegExp(title,"i")},
+		          {description: new RegExp(title,"i")}
+		          ]},function(err,videos){
+		    if (err){
+            	req.flash('error',err);
+            	res.redirect('settings');
+            }
+            else if(videos.length == 0) {
+            	req.flash('error', 'sorry required video does not exist.');
+            	res.redirect('settings');
+            }
+            else
+            {
+            	console.log(videos);
+            	res.render('users/search',{videos:videos});
+            }
+
+	});
+//res.send("success");
+});
+
 var updateeach = function(data, user,array, req, res){
 	var elem=data.split(',');
 	//console.log(elem[0]);
