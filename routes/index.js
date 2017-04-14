@@ -107,6 +107,16 @@ router.post('/search',function(req,res){
 
 	});
 //res.send("success");
+router.get('/latest', function(req, res) {
+
+});
+
+router.get('/about', function(req, res) {
+
+});
+
+router.get('/sharers', function(req, res) {
+
 });
 
 router.get('/success', function(req, res) {

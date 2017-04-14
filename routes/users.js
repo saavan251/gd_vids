@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.use(function(req, res, next) {
+	console.log(req.url);
 	if(!req.user) {
 		res.render('signin',{error : req.flash('error'), success: req.flash('success')});
 	}
@@ -241,6 +242,7 @@ var updateeach = function(data, user,array, req, res){
 	//console.log(elem[1]);
 	var userid = user._id;
 	videos.findOne({'tth': elem[1]}).populate('users._userid').exec( function(err, video){
+		console.log(video);
 		console.log(elem[1]);
 		console.log('+++++++++++');
 		if(err){

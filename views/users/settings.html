@@ -156,20 +156,22 @@
       </div>
       <div class="form-group">
         <div class="col-md-offset-5">
-            <input type="checkbox" id="issharer" onclick="if (this.checked){ document.getElementById('ip').disabled=false;}
-            if(!this.checked) {document.getElementById('ip').disabled=true;} "/>
+            <input type="checkbox" id="issharer" onclick="if (this.checked){ document.getElementById('ip').disabled=false;
+          document.getElementById('ipbut').disabled=false;}
+            if(!this.checked) {document.getElementById('ip').disabled=true;
+            document.getElementById('ipbut').disabled=true;} "/>
             <span><label><p>I am a sharer</p></label></span>
       </div> 
         <div class="col-sm-offset-3" >
           <label for="ip" class="col-sm-2 control-label">IP Address</label>
           <div class="col-sm-5">
-            <input class="form-control" id="ip" placeholder='{{userdata.ip}}' name="ip" disabled requierd> 
+            <input class="form-control" id="ip" placeholder='{{userdata.ip}}' name="ip" disabled required> 
           </div>
         </div>
       </div>
       <div class="form-group">
         <div class="col-sm-offset-5 col-sm-5">
-          <button type="submit" class="btn btn-primary">Update</button>
+          <button type="submit" id="ipbut" class="btn btn-primary" disabled>Update</button>
         </div>
       </div>
     </form>
@@ -187,4 +189,11 @@
         </div>
       </div>
     </form>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('#issharer').click(function(){
+          window.location='http://www.yahoo.com'; // link of your desired page.  
+          });
+      });
+  </script>
 {% endblock%}

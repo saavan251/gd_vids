@@ -21,7 +21,6 @@ passport.serializeUser(function(user,done){
 passport.deserializeUser(function(obj,done){
 	console.log('deserialising '+obj);
 	users.findOne({ 'nick' :  obj },function(err, user) {
-
 	done(err, user);
 });
 });
@@ -37,7 +36,7 @@ passport.use('userlogin',new LocalStrategy(
 		            var url="http://172.16.86.222:13000/login?nick="+username+"&password="+password+"&secret=qwerty";
 					request.get(url,function(err, httpres, body){
 					body = JSON.parse(body);
-					console.log(body);
+					//console.log(body);
 					if(err){
 						console.log(err);
 						return done(null, false, { message: 'some internal error has occured' });
