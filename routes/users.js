@@ -202,22 +202,28 @@ router.post('/search',function(req,res){
 	console.log("++++++++++++++++++");
 	console.log(req.body);
 	var title =req.body.title;
-	videos.find({$or:[
-		          {title: new RegExp(title,"i")},
-		          {description: new RegExp(title,"i")}
-		          ]},function(err,videos){
+	videos.find( 
+		            {$or:[
+		                  {'users.title': new RegExp(title,"i")},
+		                  {'users.description': new RegExp(title,"i")}
+		                 ]
+		       }).populate('users._userid').exec( function(err,vids){
 		    if (err){
+		    	//console.log("1");
             	req.flash('error',err);
             	res.redirect('settings');
             }
-            else if(videos.length == 0) {
+            else if(vids.length == 0) {
+            	//console.log("2");
+            	console.log(vids);
             	req.flash('error', 'sorry required video does not exist.');
             	res.redirect('settings');
             }
             else
             {
-            	console.log(videos);
-            	res.render('users/search',{videos:videos});
+            	//console.log("3");
+            	console.log(vids[0].users);
+            	res.render('users/search',{videos:vids});
             }
 
 	});
