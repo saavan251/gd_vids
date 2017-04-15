@@ -5,10 +5,14 @@ var mongoose = require('mongoose');
 var bCrypt = require('bcrypt-nodejs');
 
 var users = mongoose.model('users');
-
+var multer  = require('multer');
+var upload = multer({ dest: 'public/uploads/' });
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index');
+});
+router.post('/upload', upload.any(),function(req, res, next) {
+  res.send(req.files);
 });
 
 router.post('/userslogin', passport.authenticate('userlogin', {

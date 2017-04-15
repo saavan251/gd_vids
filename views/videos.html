@@ -1,0 +1,62 @@
+{% extends '../views/nav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/like.css" 
+    <link rel="stylesheet" type="text/css" href="/css/extra.css">
+ {% endblock%} 
+
+{% block contents %}
+ {% parent %}
+   <!--<div class="col-ls-offset-4 col-ls-8 col-md-offset-4 col-md-8 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10">-->
+     <div class="container col-lg-offset-1 col-lg-10 col-md-offset-2 col-md-10 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10">
+       <div class="row" >
+           <div class="col-md-8">
+                  <iframe width=100% height=500 style="margin-top:5%; margin-right:5%" src="http://192.168.0.100/sample.mp4" frameborder="0" allowfullscreen></iframe>
+                  <div id="comments">
+                      <h3>
+                        <span >Video title</span>
+                        <span class="col-md-offset-8 col-sm-offset-8">
+                          <button class="social-like" >
+                       <span class="like"><i class="glyphicon glyphicon-thumbs-up"></i></span>
+                       <span class="count" >0</span>
+                   </button>
+                      &nbsp;
+                   <button class="social-dislike" >
+                       <span class="dislike" >0</span>
+                       <span class="like"><i class="glyphicon glyphicon-thumbs-down"></i></span>
+                  </button> 
+                   </span>
+              </h3>
+                    <p>
+                      <span>Visitor 1</span>
+                      Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, 
+                      there live the blind texts. Separated they live in Bookmarksgrove right at the coast of 
+                      the Semantics, a large language ocean.
+                    </p>
+                 </div> 
+            </div>
+          <div class="col-md-4" style="display:none">
+            <h3 style="padding-bottom:3%">Recommended videos</h3>
+            <div style="margin=3%">
+             <iframe style="padding-top:3%" width=auto height=auto  src="https://www.youtube.com/embed/P8Xa2BitN3I?feature=oembed" frameborder="0" ></iframe>
+             <p style="float:right; padding-top:3%"><font size="3.5" color="red">this is our video</p>
+            </div>
+             <b>  
+            <div style="margin=3%">
+             <iframe style="padding-top:3%" width=auto height=auto  src="https://www.youtube.com/embed/zaBhtODEL0w?feature=oembed" frameborder="0" ></iframe>
+             <p style="float:right; padding-top:3%"><font size="3.5" color="red">this is our video 2</p>
+            </div>
+             <b>  
+             <iframe width=auto height=auto  src="https://www.youtube.com/embed/QRq6p9s8NVg?feature=oembed" frameborder="0" ></iframe>
+             <b>  
+             <iframe width=auto height=auto  src="https://www.youtube.com/embed/bIA8HEEUxZI?feature=oembed" frameborder="0" ></iframe>
+             <b>  
+             <iframe width=auto height=auto  src="https://www.youtube.com/embed/8Ls1RqHCOPw?feature=oembed" frameborder="0" ></iframe>  
+          </div>  
+       </div>         
+  </div>
+  
+ 
+
+
+ {% endblock%}

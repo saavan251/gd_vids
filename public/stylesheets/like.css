@@ -1,0 +1,34 @@
+.social-like, .social-dislike {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    /*width: 48%;*/
+    background-color: #03A9F4;
+    color: #fff;
+}
+
+.social-like {
+    border-top-left-radius: 5px;
+}
+
+.social-dislike {
+    border-top-right-radius: 5px;
+}
+
+.count, .like, .dislike {
+    padding:10px;
+}
+
+.count, .dislike {
+    background-color: #03A9F4;
+    border-radius: 50%;
+    font-size:12px;
+}
+
+.dislike {
+    margin-left: -13px;
+}
+
+.count {
+    margin-right: -10px;
+}
