@@ -12,6 +12,7 @@ var mongoose = require('mongoose');
 var moment = require('moment');
 var fs = require('fs');
 var flash = require ('connect-flash');
+var multer  = require('multer');
 var mongoosesession = require('mongoose-session');
 
 mongoose.connect('mongodb://127.0.0.1/gamedrone');

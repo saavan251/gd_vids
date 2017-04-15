@@ -5,6 +5,7 @@ var passport = require('./auth.js');
 var mongoose = require('mongoose');
 var fs = require('fs');
 var flash = require('connect-flash');
+var multer  = require('multer');
 var request = require('request');
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
@@ -13,10 +14,10 @@ var moment = require('moment');
 //models
 var users = mongoose.model('users');
 var videos = mongoose.model('videos');
-
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
+ // res.render('videos');
 });
 
 router.use(function(req, res, next) {
@@ -54,6 +55,12 @@ router.get('/settings', function( req, res, next){
 	//console.log('---------------');
 	//console.log(req.user);
 	res.render('users/settings', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
+});
+router.get('/profile', function( req, res, next){
+	//console.log(req.user.nick+' user -------------------');
+	//console.log('---------------');
+	//console.log(req.user);
+	res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 });
 
 //update password to synchronise with dchub
@@ -134,7 +141,40 @@ router.post('/editprofile', function(req, res, next) {
 		}
 	});
 });
+router.post('/search',function(req,res){
+	console.log("++++++++++++++++++");
+	console.log(req.body);
+	var title =req.body.title;
+	videos.find( 
+		            {$or:[
+		                  {'users.title': new RegExp(title,"i")},
+		                  {'users.description': new RegExp(title,"i")}
+		                 ]
+		       }).populate('users._userid').exec( function(err,vids){
+		    if (err){
+		    	//console.log("1");
+            	req.flash('error',err);
+            	res.redirect('settings');
+            }
+            else if(vids.length == 0) {
+            	//console.log("2");
+            	console.log(vids);
+            	req.flash('error', 'sorry required video does not exist.');
+            	res.redirect('settings');
+            }
+            else
+            {
+            	//console.log("3");
+            	console.log(vids[0].users);
+            	if(req.user)
+            		res.render('users/search',{videos:vids});
+            	else
+            		res.render('search', {videos: vids});
+            }
 
+	});
+//res.send("success");
+});
 router.post('/refresh', function(req, res, next) {
 	var ip = req.user.ip;
 	var url="http://"+ip+"/vidserve/list.html";
