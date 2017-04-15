@@ -51,6 +51,30 @@ router.get('/watch/:id', function(req, res, next) {
 	});
 });
 
+router.get('/watch', function(req, res, next) {
+	//var val = req.query.id;
+	/*console.log(req.params.id);
+	var id = req.params.id;
+	videos.update({ '_id' : id}, {$inc : { views : 1 }}).exec();
+	videos.findOne( { '_id' : id}).populate('users._userid').exec( function(err, video){
+		console.log(video);
+		var user = selectuser(video.users);
+		console.log(user);
+		var ip = user._userid.ip;
+		var path = user.url;
+		//console.log(path);
+		//console.log('+++++++');
+		//var vidurl="http://"+ip+path;*/
+		var vidurl = "http://localhost:8888/movie.mp4"
+		console.log(vidurl);
+		if(req.user)
+			res.render('users/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user});
+		else
+			res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl});
+		//res.send(ip);	
+	//});
+});
+
 router.get('/upvoted/:id', function(req, res, next) {
 	//var val = req.query.id;
 	console.log(req.params.id);
