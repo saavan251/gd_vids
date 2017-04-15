@@ -16,8 +16,8 @@ var users = mongoose.model('users');
 var videos = mongoose.model('videos');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  //res.send('respond with a resource');
-  res.render('videos');
+  res.send('respond with a resource');
+ // res.render('videos');
 });
 
 router.use(function(req, res, next) {
