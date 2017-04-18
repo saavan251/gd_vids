@@ -17,9 +17,6 @@
       </div>
 
 
-
-
-
   <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12">
     <div class="col-sm-12 col-md-6 col-xs-12">
       <div class="panel panel-default" >
@@ -35,6 +32,7 @@
               </tr>-->
                 </thead>
                 <tbody>
+                  <!--
                   <tr>
                     <td><form action="http://192.168.118.164:3000/videos/get?_id=58e30cf411f05a9ba9105875"><button type="submit" class="list-group-item">big video</button>
                     </form></td>
@@ -64,7 +62,33 @@
                     <td><form action="http://192.168.118.164:3000/videos/get/58e4559c672c65a46febc38e"><button type="submit" class="list-group-item">shirley setia xampp</button>
                     </form></td>
                     <td>vid_size</td>
-                  </tr>
+                  </tr>-->
+
+               
+                 
+
+                {% for video in videoss %}
+                   <a href="/videos/watch/{{ video._id.toString() }}">
+               <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
+                      <div class="panel">
+                        <div class="row">
+                          <div class="col-sm-4 col-md-">
+                            <span class="thumbnail" style="margin: auto;">
+                              <img src="/images/img_avatar2.jpg" alt="#">
+                            </span>
+                          </div>
+                          <div class="col-sm-6 col-md-4">
+                            <span class="caption">
+                              <h3> {{ video.users[0].title }}</h3>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   </a>
+                {% endfor %}
+
+
                 </tbody>
               </table>
             </div>
@@ -85,17 +109,29 @@
                  <div class="table-responsive">          
                 <table class="table table-bordered">
                   <thead>
-                    <tr>
-                      
-                      <th><center>NICK</center></th>
-                      <th><center>URL</center></th>
-                    </tr>
+                   
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>sharer1</td>
-                      <td><button type="button" class="list-group-item">Cras justo odio</button></td>
-                    </tr>
+                     {% for video in videos %}
+                    <a href="/videos/watch/{{ video._id.toString() }}">
+                <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
+                      <div class="panel">
+                        <div class="row">
+                          <div class="col-sm-4 col-md-4">
+                            <span class="thumbnail" style="margin: auto;">
+                              <img src="/images/img_avatar2.jpg" alt="#">
+                            </span>
+                          </div>
+                          <div class="col-sm-6 col-md-4">
+                            <span class="caption">
+                              <h3> {{ video.users[0].title }}</h3>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                   </a>
+                {% endfor %}
                   </tbody>
                 </table>
                 </div>

@@ -7,9 +7,50 @@ var bCrypt = require('bcrypt-nodejs');
 var users = mongoose.model('users');
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
+var videos = mongoose.model('videos');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
+  // var v1 = null;
+   videos.aggregate([
+   	     {$sort: {views: -1}},
+   	     {$limit: 2}
+   	]).exec( function(err,vids){
+		    if (err){
+		    	//console.log("1");
+            	req.flash('error',err);
+            }
+            else if(vids.length == 0) {
+            	//console.log("2");
+            	console.log(vids);
+            	req.flash('error', 'sorry required video does not exist.');
+            	//res.redirect('settings');
+            }
+            else
+            {
+                videos.aggregate([
+                  {$sort: { _id: -1}},
+                  {$limit: 2}
+                ]).exec( function(err,vides){
+                       if (err){
+                                 req.flash('error',err);
+                               }
+                      else if(vids.length == 0) {
+                         console.log(vides);
+                         req.flash('error', 'sorry required video does not exist.');
+                           }
+                      else{
+                             console.log(vides);
+            	             if(req.user)
+            	               	res.render('users/index',{videos:vids, videoss:vides, userdata: req.user});
+            	             else
+            		          res.render('index', {videos: vids, videoss:vides});
+                 }
+              });
+            }
+
+	});
+	
 });
 router.post('/upload', upload.any(),function(req, res, next) {
   res.send(req.files);
@@ -31,6 +72,41 @@ router.get('/logout', function(req, res) {
 	req.logout();
 	req.session.destroy();
 	res.redirect('/');
+});
+
+router.post('/search',function(req,res){
+	console.log("++++++++++++++++++");
+	console.log(req.body);
+	var title =req.body.title;
+	videos.find( 
+		            {$or:[
+		                  {'users.title': new RegExp(title,"i")},
+		                  {'users.description': new RegExp(title,"i")}
+		                 ]
+		       }).populate('users._userid').exec( function(err,vids){
+		    if (err){
+		    	//console.log("1");
+            	req.flash('error',err);
+            	res.redirect('settings');
+            }
+            else if(vids.length == 0) {
+            	//console.log("2");
+            	console.log(vids);
+            	req.flash('error', 'sorry required video does not exist.');
+            	res.redirect('settings');
+            }
+            else
+            {
+            	//console.log("3");
+            	console.log(vids[0].users);
+            	if(req.user)
+            		res.render('users/search',{videos:vids});
+            	else
+            		res.render('search', {videos: vids});
+            }
+
+	});
+//res.send("success");
 });
 
 router.get('/success', function(req, res) {
