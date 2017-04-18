@@ -42,7 +42,43 @@ router.get('/signin', function(req, res, next) {
 router.get('/index',function(req,res,next){
 	console.log(req.session);
 	console.log(req.user," req.user");
-	res.render('users/index',{ userdata: req.user});
+
+	  videos.aggregate([
+   	     {$sort: {views: -1}},
+   	     {$limit: 2}
+   	]).exec( function(err,vids){
+		    if (err){
+		    	//console.log("1");
+            	req.flash('error',err);
+            }
+            else if(vids.length == 0) {
+            	//console.log("2");
+            	console.log(vids);
+            	req.flash('error', 'sorry required video does not exist.');
+            	//res.redirect('settings');
+            }
+            else
+            {
+                videos.aggregate([
+                  {$sort: { _id: -1}},
+                  {$limit: 2}
+                ]).exec( function(err,vides){
+                       if (err){
+                                 req.flash('error',err);
+                               }
+                      else if(vids.length == 0) {
+                         console.log(vides);
+                         req.flash('error', 'sorry required video does not exist.');
+                           }
+                      else{
+                             console.log(vides);
+            	           res.render('users/index',{ videos:vids, videoss:vides, userdata: req.user});
+                 }
+              });
+            }
+
+	});
+	
 });
 
 //password forget and reset
@@ -198,37 +234,6 @@ router.post('/refresh', function(req, res, next) {
 
 });
 
-router.post('/search',function(req,res){
-	console.log("++++++++++++++++++");
-	console.log(req.body);
-	var title =req.body.title;
-	videos.find( 
-		            {$or:[
-		                  {'users.title': new RegExp(title,"i")},
-		                  {'users.description': new RegExp(title,"i")}
-		                 ]
-		       }).populate('users._userid').exec( function(err,vids){
-		    if (err){
-		    	//console.log("1");
-            	req.flash('error',err);
-            	res.redirect('settings');
-            }
-            else if(vids.length == 0) {
-            	//console.log("2");
-            	console.log(vids);
-            	req.flash('error', 'sorry required video does not exist.');
-            	res.redirect('settings');
-            }
-            else
-            {
-            	//console.log("3");
-            	console.log(vids[0].users);
-            	res.render('users/search',{videos:vids});
-            }
-
-	});
-//res.send("success");
-});
 
 var updateeach = function(data, user,array, req, res){
 	var elem=data.split(',');

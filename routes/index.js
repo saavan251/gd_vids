@@ -11,7 +11,46 @@ var videos = mongoose.model('videos');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('videos');
+  // var v1 = null;
+   videos.aggregate([
+   	     {$sort: {views: -1}},
+   	     {$limit: 2}
+   	]).exec( function(err,vids){
+		    if (err){
+		    	//console.log("1");
+            	req.flash('error',err);
+            }
+            else if(vids.length == 0) {
+            	//console.log("2");
+            	console.log(vids);
+            	req.flash('error', 'sorry required video does not exist.');
+            	//res.redirect('settings');
+            }
+            else
+            {
+                videos.aggregate([
+                  {$sort: { _id: -1}},
+                  {$limit: 2}
+                ]).exec( function(err,vides){
+                       if (err){
+                                 req.flash('error',err);
+                               }
+                      else if(vids.length == 0) {
+                         console.log(vides);
+                         req.flash('error', 'sorry required video does not exist.');
+                           }
+                      else{
+                             console.log(vides);
+            	             if(req.user)
+            	               	res.render('users/index',{videos:vids, videoss:vides, userdata: req.user});
+            	             else
+            		          res.render('index', {videos: vids, videoss:vides});
+                 }
+              });
+            }
+
+	});
+	
 });
 router.post('/upload', upload.any(),function(req, res, next) {
   res.send(req.files);
