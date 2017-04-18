@@ -14,7 +14,7 @@ var fs = require('fs');
 var flash = require ('connect-flash');
 var multer  = require('multer');
 var mongoosesession = require('mongoose-session');
-
+var paginate = require('express-paginate');
 mongoose.connect('mongodb://127.0.0.1/gamedrone');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -58,8 +58,12 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/users', users);
 app.use('/videos', videos);
+<<<<<<< HEAD
 app.use('/update', update);
 
+=======
+app.use(paginate.middleware(10, 50));
+>>>>>>> pagination added
 
 
 // catch 404 and forward to error handler

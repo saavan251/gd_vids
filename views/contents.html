@@ -1,3 +1,4 @@
+
 {% extends '../views/nav.html' %}
 {% block customCSS %}
  {% parent %}
@@ -27,22 +28,13 @@
         <div class="panel">
           <div class="row">
             <div class="col-sm-4 col-md-2">
-<<<<<<< HEAD
-              <span class="thumbnail" style="margin: 2% auto;">
-                <img src="images/img_avatar2.jpg" alt="#">
-=======
               <span class="thumbnail" style="margin: auto;">
-                <img src="./images/sonali.jpg" alt="#">
->>>>>>> pagination added
+                <img src="public/images/img_avatar2.jpg" alt="img_avatar2">
               </span>
             </div>
-            <div class="col-sm-7 col-md-9" >
-              <span style:"margin-top:10% auto;">
-                <h4> {{ video.users[video.users.length-1].title }}</h4>
-              </span>
-              Shared By:&nbsp
-              <span style="color:yellow;">
-                {{video.users.length}} users
+            <div class="col-sm-6 col-md-4">
+              <span class="caption">
+                <h3> {{ video.users[0].title }}</h3>
               </span>
             </div>
           </div>
@@ -50,27 +42,5 @@
       </div>
     </a>
     {% endfor %}
-    
-      <center>
-    <nav aria-label="Page navigation">
-  <ul class="pagination">
-    <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    {% for i in a %}
-    <li>
-     <a href="/search?title={{qry.title}}&page={{i}}">{{i}}</a>
-   </li>
-    {% endfor %}
-    <li>
-      <a href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav></center>
-
-
+ </div>
 {% endblock%}

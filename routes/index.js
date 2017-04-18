@@ -8,7 +8,7 @@ var users = mongoose.model('users');
 var multer  = require('multer');
 var upload = multer({ dest: 'public/uploads/' });
 var videos = mongoose.model('videos');
-
+var paginate = require('express-paginate');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // var v1 = null;

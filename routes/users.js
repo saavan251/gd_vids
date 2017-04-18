@@ -9,8 +9,8 @@ var multer  = require('multer');
 var request = require('request');
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
-
-
+var paginate = require('express-paginate');
+//app.use(paginate.middleware(10, 50));
 //models
 var users = mongoose.model('users');
 var videos = mongoose.model('videos');
@@ -177,8 +177,8 @@ router.post('/editprofile', function(req, res, next) {
 });
 
 router.post('/search',function(req,res){
-	console.log("++++++++++++++++++");
-	console.log(req.body);
+	//console.log("++++++++++++++++++");
+	//console.log(req.body);
 	var title =req.body.title;
 	videos.find( 
 		            {$or:[
@@ -193,16 +193,16 @@ router.post('/search',function(req,res){
             }
             else if(vids.length == 0) {
             	//console.log("2");
-            	console.log(vids);
+            	//console.log(vids);
             	req.flash('error', 'sorry required video does not exist.');
             	res.redirect('settings');
             }
             else
             {
             	//console.log("3");
-            	console.log(vids[0].users);
+            	//console.log(vids[0].users);
             	if(req.user)
-            		res.render('users/search',{videos:vids});
+            		res.render('users/search',{videos:vids,userdata: req.user});
             	else
             		res.render('search', {videos: vids});
             }
