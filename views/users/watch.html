@@ -17,23 +17,62 @@
               </video>
               <ul class="list-group" style="margin-top:2%;">
                 <li class="list-group-item"><span class="videotitle">{{vusrdata.title}}</span>
-                  <span class="label label-primary col-md-offset-1 col-sm-offset-1 ">
+                  <span class="label label-primary col-md-offset-1 col-sm-offset-1 " style="margin-top:2%;">
                     <span class="badge" >{{videodata.views}} </span> views</span>
-                        
-                    <span class="col-md-offset-1 col-sm-offset-1" style="display-inline;">
-                      <a  href="/videos/upvoted/{{videodata._id.toString()}}" >
+                    
+                    {% if up %}    
+                    <span class="" style="display-inline;margin-left:4%;margin-top:2%;">
+                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/1" >
+                        <button class="btn btn-sm btn-success" type="submit" id="upvote" >
+                          upvoted
+                        </button>
+                      </a>
+                    </span>
+                    <span class="" style="display-inline;margin-left:2%;margin-top:2%;"  >
+                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/0" >
+                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" disabled>
+                          <i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{videodata.downvotes}}</span>
+                        </button>
+                      </a>
+                    </span>
+                    {% elseif dn %}
+                    <span class="" style="display-inline;margin-left:4%;margin-top:2%;" >
+                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/0" >
+                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" disabled>
+                          <i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{videodata.upvotes}}</span>
+                        </button>
+                      </a>
+                    </span>
+                    <span class="" style="display-inline;margin-left:2%;margin-top:2%;">
+                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/1" >
+                        <button class="btn btn-sm btn-warning" type="submit" id="upvote" >
+                          downvoted
+                        </button>
+                      </a>
+                    </span>
+                    {% else %}
+                    <span class="" style="display-inline;margin-left:4%;margin-top:2%;">
+                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/0" >
                         <button class="btn btn-sm btn-primary" type="submit" id="upvote" >
                           <i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{videodata.upvotes}}</span>
                         </button>
                       </a>
                     </span>
-                    <span>
+                    <span class="" style="display-inline;margin-left:2%;margin-top:2%;">
+                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/0" >
+                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" >
+                          <i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{videodata.downvotes}}</span>
+                        </button>
+                      </a>
+                    </span>
+                    {% endif %}
+                    <!--span>
                       <a  href="/videos/downvoted/{{videodata._id.toString()}}">
                         <button class="btn btn-sm btn-primary" type="submit" id="downvote">
                           <i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{videodata.downvotes}}</span>
                         </button>
                       </a>
-                    </span>
+                    </span-->
                   
                 </li>
               </ul>
