@@ -31,6 +31,10 @@ var userSchema = new Schema({
 		type:Boolean,
 		default:false
 	},
+	lastseen:{
+		type: Date,
+        default: Date.now
+	},
 	upvoted:[{
 			type: Schema.Types.ObjectId,
 			ref: 'videos'

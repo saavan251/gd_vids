@@ -41,7 +41,31 @@ router.get('/watch/:id', function(req, res, next) {
 		var path = user.url;
 		//console.log(path);
 		//console.log('+++++++');
-		var vidurl="http://"+ip+path;
+		var vidurl="http://"+ip+":8888/"+path;
+		console.log(vidurl);
+		if(req.user)
+			res.render('users/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user, vusrdata: user,videodata: video});
+		else
+			res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, vusrdata: user, videodata: video });
+		//res.send(ip);	
+	});
+});
+
+/*router.get('/watch', function(req, res, next) {
+	//var val = req.query.id;
+	//console.log(req.params.id);
+	var id = req.params.id;
+	videos.update({ '_id' : id}, {$inc : { views : 1 }}).exec();
+	videos.findOne( { '_id' : id}).populate('users._userid').exec( function(err, video){
+		//console.log(video);
+		var user = selectuser(video.users);
+		console.log(user);
+		var ip = user._userid.ip;
+		var path = user.url;
+		//console.log(path);
+		console.log('+++++++88888888');
+		var vidurl="http://"+ip+":8888/"+path;
+		//var vidurl = "http://localhost:8888/v1.mp4"
 		console.log(vidurl);
 		if(req.user)
 			res.render('users/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user});
@@ -49,30 +73,55 @@ router.get('/watch/:id', function(req, res, next) {
 			res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl});
 		//res.send(ip);	
 	});
-});
+});*/
 
-router.get('/watch', function(req, res, next) {
+router.get('/downvoted/:id', function(req, res, next) {
 	//var val = req.query.id;
-	/*console.log(req.params.id);
+	console.log(req.params.id);
 	var id = req.params.id;
-	videos.update({ '_id' : id}, {$inc : { views : 1 }}).exec();
-	videos.findOne( { '_id' : id}).populate('users._userid').exec( function(err, video){
-		console.log(video);
-		var user = selectuser(video.users);
-		console.log(user);
-		var ip = user._userid.ip;
-		var path = user.url;
-		//console.log(path);
-		//console.log('+++++++');
-		//var vidurl="http://"+ip+path;*/
-		var vidurl = "http://localhost:8888/movie.mp4"
-		console.log(vidurl);
-		if(req.user)
-			res.render('users/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user});
-		else
-			res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl});
-		//res.send(ip);	
-	//});
+	if(!req.user){
+
+	}
+	else{
+		videos.findOne( { '_id' : id}, function(err, video){
+			//console.log(video);
+			users.update(
+				{'_id' : req.user._id},{
+		            $addToSet:{ 
+		                'downvoted': id
+		            } 
+		        }, function(err, result){
+	                if(err){
+	                	console.log(err);
+						req.flash('error', 'some internal error in upvoting process');
+						res.redirect('/users/index');
+	                }
+	                else{
+	                	users.update({
+	                		'_id': req.user._id},{
+	                			$pull: {
+	                				'upvoted': id
+	                			}
+	                		}, function( err, resultp){
+	                			if(err){
+	                				console.log(err);
+	                				req.flash('error', 'some internal error in upvoting process');
+	                				res.redirect('users/index');
+	                			}
+	                			if(result.nModified == 1){
+		                			videos.update({ '_id' : id}, {$inc : { downvotes : 1 }}).exec();
+			                	}
+			                	if(result.nModified == 1){
+			                		videos.update({ '_id' : id}, {$inc : { upvotes : -1 }}).exec();
+			                	}
+	                	});
+	                }
+	                //console.log("######");
+	                //console.log(result);
+	        });	
+		});
+		res.send('downvoted');
+	}
 });
 
 router.get('/upvoted/:id', function(req, res, next) {
@@ -84,7 +133,7 @@ router.get('/upvoted/:id', function(req, res, next) {
 	}
 	else{
 		videos.findOne( { '_id' : id}, function(err, video){
-			console.log(video);
+			//console.log(video);
 			users.update(
 				{'_id' : req.user._id},{
 		            $addToSet:{ 
@@ -97,13 +146,27 @@ router.get('/upvoted/:id', function(req, res, next) {
 						res.redirect('/users/index');
 	                }
 	                else{
-	                	if(result.nModified == 1){
-	                		videos.update({ '_id' : id}, {$inc : { upvotes : 1 }}).exec();
-	                	}
-
+	                	users.update({
+	                		'_id': req.user._id},{
+	                			$pull: {
+	                				'downvoted': id
+	                			}
+	                		}, function( err, resultp){
+	                			if(err){
+	                				console.log(err);
+	                				req.flash('error', 'some internal error in upvoting process');
+	                				res.redirect('users/index');
+	                			}
+	                			if(result.nModified == 1){
+			                		videos.update({ '_id' : id}, {$inc : { upvotes : 1 }}).exec();
+			                	}
+			                	if(result.nModified == 1){
+			                		videos.update({ '_id' : id}, {$inc : { downvotes : -1 }}).exec();
+			                	}
+	                	});
 	                }
-	                console.log("######");
-	                console.log(result);
+	                //console.log("######");
+	                //console.log(result);
 	        });	
 		});
 		res.send('upvoted');

@@ -7,95 +7,55 @@
  {% endblock%} 
 {% block contents %}
     {% parent %}
- <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12" style="margin-top: 100px";>
-  <div class="col-sm-12 col-md-6 col-xs-12">
-  	<div class="panel panel-default" >
-  		<div class="panel-heading"><center>RECENT CONTENTS</center></div>
-    <div class="panel-body" id="panel">
-      <div class="table-responsive">          
-          <table class="table table-bordered">
-            <thead>
-            </thead>
-            <tbody>
-              <!--
-              <tr>
-                <td><form action="http://192.168.118.164/vidserve/v1.mp4"><button type="submit" class="list-group-item">v1.mp4</button>
-                </form></td>
-                <td>vid_size</td>
-              </tr>
-              <tr>
-                <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
-                </form></td>
-                <td>vid_size</td>
-              </tr>
-              <tr>
-                <td><form action="www.google.com"><button type="submit" class="list-group-item">Cras justo odio</button>
-                </form></td>
-                <td>vid_size</td>
-              </tr>-->
-
-                    {% for video in videoss %}
-                       <a href="/videos/watch/{{ video._id.toString() }}">
-                   <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
-                          <div class="panel">
-                            <div class="row">
-                              <div class="col-sm-4 col-md-4">
-                                <span class="thumbnail" style="margin: auto;">
-                                  <img src="/images/img_avatar2.jpg" alt="#">
-                                </span>
-                              </div>
-                              <div class="col-sm-6 col-md-4">
-                                <span class="caption">
-                                  <h3> {{ video.users[0].title }}</h3>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                       </a>
-                    {% endfor %}
-
-            </tbody>
-          </table>
+ 
+  <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12" style="margin-top:2%">
+    <div class="col-sm-12 col-md-6 col-xs-12">
+      <div class="panel panel-default" >
+        <div class="panel-heading"><center>RECENT CONTENTS</center></div>
+        <div class="panel-body" id="panel">
+          <div class="table-responsive">          
+            {% for video in videos %}
+               <a href="/videos/watch/{{ video._id.toString() }}">
+                 <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-10 ">
+                    <div class="row">
+                        <span class="thumbnail col-sm-2 col-md-2" style="margin: auto;">
+                          <img src="/images/img_avatar2.jpg" alt="#">
+                        </span>
+                        <span class="container col-sm-6 col-md-9" style="margin: auto;padding: auto;">
+                          <h3 style="margin: 2% auto"> {{ video.users[0].title }}</h3>
+                        </span>
+                    </div>
+                  </div>
+               </a>
+            {% endfor %}
           </div>
-    </div>
-  	</div>
-	</div>
-	<div class="col-sm-12 col-md-6 col-xs-12">
-  		<div class="panel panel-default">
-  			<div class="panel-heading"><center>TOP TEN VIDEOS </center></div>
-   			 <div class="table-responsive">          
-			  <table class="table table-bordered">
-			    <thead>
-			       
-			    </thead>
-			    <tbody>
-			       {% for video in videos %}
-                    <a href="/videos/watch/{{ video._id.toString() }}">
-                <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
-                      <div class="panel">
-                        <div class="row">
-                          <div class="col-sm-4 col-md-4">
-                            <span class="thumbnail" style="margin: auto;">
-                              <img src="/images/img_avatar2.jpg" alt="#">
-                            </span>
-                          </div>
-                          <div class="col-sm-6 col-md-4">
-                            <span class="caption">
-                              <h3> {{ video.users[0].title }}</h3>
-                            </span>
-                          </div>
-                        </div>
+        </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-xs-12">
+        <div class="panel panel-default" >
+          <div class="panel-heading"><center>WEEKLY TOP CHART</center></div>
+          <div class="panel-body" id="panel">
+            <div class="table-responsive">          
+              {% for video in videoss %}
+                 <a href="/videos/watch/{{ video._id.toString() }}">
+                   <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-10 ">
+                      <div class="row">
+                          <span class="thumbnail col-sm-2 col-md-2" style="margin: auto;">
+                            <img src="/images/img_avatar2.jpg" alt="#">
+                          </span>
+                          <span class="container col-sm-6 col-md-9" style="margin: auto;padding: auto;">
+                            <h3 style="margin: 2% auto"> {{ video.users[0].title }}</h3>
+                          </span>
                       </div>
                     </div>
-                   </a>
-                {% endfor %}
-			    </tbody>
-			  </table>
-			  </div>
-  		</div>
-  	</div>
-</div>
+                 </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
 {% endblock%} 
 
  
