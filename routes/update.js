@@ -155,7 +155,7 @@ var updateeach = function(data, user,array, req, res){
 			console.log("$$$$$$$$$$$$$$$$$");var ct = elem[0].lastIndexOf('/')+1;
 			var video = new videos({
 				tth: elem[1],
-				format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length -4),
+				format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length),
 				users: [{
 					_userid: userid,
 					title: elem[0].substring(ct,elem[0].length -4 ),

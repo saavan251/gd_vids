@@ -11,12 +11,7 @@ var multer  = require('multer');
 var videos = mongoose.model('videos'); 
 var paginate = require('express-paginate'); 
 /* GET home page. */
-router.get('/about',function(req, res, next){
-     if(req.user)
-          res.render('users/about',{userdata: req.user});
-      else
-           res.render('about');
-});
+
 router.get('/', function(req, res, next) {
   // var v1 = null;
    videos.aggregate([
@@ -88,9 +83,6 @@ router.post('/attendance', function(req, res, next) {
   });
 });
 
-router.post('/upload', upload.any(),function(req, res, next) {
-  res.send(req.files);
-});
 
 router.post('/userslogin', passport.authenticate('userlogin', {
     successRedirect: '/users/index',
@@ -98,11 +90,6 @@ router.post('/userslogin', passport.authenticate('userlogin', {
     failureFlash: true
 }));
 
-/*router.post('/userslogin', passport.authenticate('userlogin',{
-	failureRedirect: '/users/signin'}),function(req,res){
-	console.log(req.user);
-	res.redirect('/users/index');
-});*/
 
 router.get('/logout', function(req, res) {
 	req.logout();
@@ -110,9 +97,8 @@ router.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
-/*
-router.post('/search',function(req,res){
 
+router.get('/search',function(req,res){
 	console.log("++++++++++++++++++");
   console.log(req.url);
 	console.log(req.query);
@@ -197,8 +183,8 @@ router.get('/latest', function(req, res) {
       res.redirect('settings');
     }
     else{
-      console.log("3aaaaaaaaaa");
-      console.log(vids[0].users);
+      //console.log("3aaaaaaaaaa");
+      //console.log(vids[0].users);
       if(req.user)
         res.render('users/latest',{userdata: req.user, a:a, videos:vids, qry: req.query});
       else
@@ -207,80 +193,18 @@ router.get('/latest', function(req, res) {
   });
 });
 
-router.get('/about', function(req, res) {
-  res.render('error');
-
-});
 
 router.get('/sharers', function(req, res) {
   res.render('error');
 
 });
-*/
-/*
-router.post('/search',function(req,res){
- 
-  var title =req.body.title;
-  users.findOne( { 'nick' : title},function(err, user) {
-            if (err) {
-              req.flash('error',err);
-              res.redirect('settings');
-            }
-            else if(!user) {
-              req.flash('error', 'sorry you have not registered.');
-              res.redirect('settings');
-            }
-            else
-<<<<<<< HEAD
-        {
-              console.log("got");
-              console.log(user._id);
-              var na =user._id;
-              console.log(typeof na);
-             videos.find( 
-                      {'users._userid': na}
-                ).exec( function(err,vids){
-                        if (err){
-                          console.log("1");
-                         req.flash('error',err);
-                        res.redirect('settings');
-                         }
-                        else if(vids.length == 0) {
-              //console.log("2");
-                           console.log("2");
-                           req.flash('error', 'sorry required video does not exist.');
-                           res.redirect('settings');
-                         }
-                         else
-                         {
-                             console.log("3");
-                             console.log(vids);
-                             if(req.user)
-                              res.render('users/search',{videos:vids});
-                            else
-                                res.render('search', {videos: vids});
-                         }
-=======
-            {
-            	//console.log("3");
-            	console.log(vids[0].users);
-            	if(req.user)
-            		res.render('users/search',{videos:vids,userdata: req.user});
-            	else
-            		res.render('search', {videos: vids});
-            }
->>>>>>> profile added
 
-                });
-
-        }
-*/
-
-
-  });
-//res.send("success");
+router.get('/about',function(req, res, next){
+     if(req.user)
+          res.render('users/about',{userdata: req.user});
+      else
+           res.render('about');
 });
-
 
 router.get('/success', function(req, res) {
 	res.render('success', {error : req.flash('error'), success: req.flash('success')});

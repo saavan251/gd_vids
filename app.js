@@ -57,19 +57,11 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/users', users);
 app.use('/videos', videos);
-<<<<<<< HEAD
 app.use('/update', update);
 
-=======
-app.use(paginate.middleware(10, 50));
-<<<<<<< HEAD
->>>>>>> pagination added
 
 
 // catch 404 and forward to error handler
-=======
-//// catch 404 and forward to error handler
->>>>>>> profile added
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;

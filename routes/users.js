@@ -153,6 +153,7 @@ router.get('/settings', function( req, res, next){
 	//console.log(req.user);
 	res.render('users/settings', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 });
+
 router.get('/profile', function( req, res, next){
 	console.log(req.user.nick+'.jpg');
 	//console.log('---------------');
@@ -172,6 +173,7 @@ router.get('/profile', function( req, res, next){
 	 res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st: str });
 	}
 });
+
 router.post('/profile',function(req, res, next) {
 	upload(req, res, function (err) {
 		var file = false;
@@ -226,6 +228,7 @@ router.post('/profile',function(req, res, next) {
 		}
 	});
 });
+
 //update password to synchronise with dchub
 router.post('/passupdate', function(req, res, next) {
 	//console.log(req);
