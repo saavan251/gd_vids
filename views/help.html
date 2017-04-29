@@ -1,0 +1,47 @@
+{% extends '../views/nav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
+    <link rel="stylesheet" type="text/css" href="/css/extra.css">
+ {% endblock%} 
+
+ {% block contents %}
+ {% parent %}
+ 
+  <div class ="col-md-offset-3">
+  	<h1  style="margin-left:4%; margin-top:5%;margin-bottom:2%" id ="share"><font size="7.5">How To Share</h1>
+  	
+  	<p style="margin-left:6%"><font size="4.5">
+  		1. Login by your DC id.
+  	</p>
+
+  	<p style="margin-left:6%"><font size="4.5">
+  		2. Goto Settings And Update Your Profile Data.
+
+  	</p>
+     
+
+     <p style="margin-left:7%"><font size="4.5">
+  		 a.If connected by LAN : IP Address is your system's IP Address.
+  		</p>
+
+  	 <p style="margin-left:7%"><font size="4.5">	 
+  		 b.If connected by router : IP Address is router's IP Address.
+
+  	</p>
+
+    
+    <p style="margin-left:6%"><font size="4.5">
+  		3. Download the given zip folder.
+  		<a href ="http://192.168.118.164:3000/setup.zip" download>
+  			<text>   Download </text>
+  		
+  	    </a>
+  	</p> 
+
+  	<p style="margin-left:6%"><font size="4.5">
+  		4. Place the videos you want to share in this folder.
+  	</p>
+
+
+{% endblock%} 

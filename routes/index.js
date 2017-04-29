@@ -103,7 +103,9 @@ router.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
-router.get('/search',function(req,res){
+/*
+router.post('/search',function(req,res){
+
 	console.log("++++++++++++++++++");
   console.log(req.url);
 	console.log(req.query);
@@ -207,6 +209,60 @@ router.get('/sharers', function(req, res) {
   res.render('error');
 
 });
+*/
+
+router.post('/search',function(req,res){
+ 
+  var title =req.body.title;
+  users.findOne( { 'nick' : title},function(err, user) {
+            if (err) {
+              req.flash('error',err);
+              res.redirect('settings');
+            }
+            else if(!user) {
+              req.flash('error', 'sorry you have not registered.');
+              res.redirect('settings');
+            }
+            else
+        {
+              console.log("got");
+              console.log(user._id);
+              var na =user._id;
+              console.log(typeof na);
+             videos.find( 
+                      {'users._userid': na}
+                ).exec( function(err,vids){
+                        if (err){
+                          console.log("1");
+                         req.flash('error',err);
+                        res.redirect('settings');
+                         }
+                        else if(vids.length == 0) {
+              //console.log("2");
+                           console.log("2");
+                           req.flash('error', 'sorry required video does not exist.');
+                           res.redirect('settings');
+                         }
+                         else
+                         {
+                             console.log("3");
+                             console.log(vids);
+                             if(req.user)
+                              res.render('users/search',{videos:vids});
+                            else
+                                res.render('search', {videos: vids});
+                         }
+
+                });
+
+        }
+
+
+
+  });
+//res.send("success");
+});
+
 
 router.get('/success', function(req, res) {
 	res.render('success', {error : req.flash('error'), success: req.flash('success')});
