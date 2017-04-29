@@ -158,7 +158,7 @@ var updateeach = function(data, user,array, req, res){
 				format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length -4),
 				users: [{
 					_userid: userid,
-					title: elem[0].substring(ct,elem[0].length ),
+					title: elem[0].substring(ct,elem[0].length -4 ),
 					url: elem[0],
 					version: parseInt(array[0])
 				}]

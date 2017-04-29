@@ -41,11 +41,8 @@ router.get('/signin', function(req, res, next) {
 });
 
 router.get('/index',function(req,res,next){
-	console.log(req.session);
-	console.log(req.user," req.user");
-
-	  videos.aggregate([
-   	     {$sort: {views: -1}},
+	videos.aggregate([
+   	     {$sort: {_id: -1}},
    	     {$limit: 10}
    	]).exec( function(err,vids){
 		    if (err){
@@ -59,27 +56,27 @@ router.get('/index',function(req,res,next){
             	//res.redirect('settings');
             }
             else
-            {
-                videos.aggregate([
-                  {$sort: { _id: -1}},
-                  {$limit: 10}
-                ]).exec( function(err,vides){
-                       if (err){
-                                 req.flash('error',err);
-                               }
-                      else if(vids.length == 0) {
-                         console.log(vides);
-                         req.flash('error', 'sorry required video does not exist.');
+            {  
+              videos.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  }  }
+                ).sort({ views: -1}).limit(10).exec( function(err,vides){
+                   if (err){
+                             req.flash('error',err);
                            }
-                      else{
-                             console.log(vides);
-            	           res.render('users/index',{ videos:vids, videoss:vides, userdata: req.user});
-                 }
-              });
+                  else if(vids.length == 0) {
+                     console.log(vides);
+                     req.flash('error', 'sorry required video does not exist.');
+                       }
+                  else{
+                         console.log(vides);
+        	             if(req.user)
+        	               	res.render('users/index',{videos:vids, videoss:vides, userdata: req.user});
+        	             else
+        		          res.render('index', {videos: vids, videoss:vides});
+                    }
+                });
             }
 
 	});
-	
 });
 
 //password forget and reset

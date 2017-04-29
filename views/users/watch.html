@@ -78,24 +78,42 @@
                 </li>
               </ul>
             </div>
-          <div class="col-md-4" style="display:none">
+          <!--div class="col-md-4" style="display:none">
             <h3 style="padding-bottom:3%">Recommended videos</h3>
             <div style="margin=3%">
              <iframe style="padding-top:3%" width=auto height=auto  src="https://www.youtube.com/embed/P8Xa2BitN3I?feature=oembed" frameborder="0" ></iframe>
              <p style="float:right; padding-top:3%"><font size="3.5" color="red">this is our video</p>
             </div>
              <b>  
-            <div style="margin=3%">
-             <iframe style="padding-top:3%" width=auto height=auto  src="https://www.youtube.com/embed/zaBhtODEL0w?feature=oembed" frameborder="0" ></iframe>
-             <p style="float:right; padding-top:3%"><font size="3.5" color="red">this is our video 2</p>
-            </div>
-             <b>  
-             <iframe width=auto height=auto  src="https://www.youtube.com/embed/QRq6p9s8NVg?feature=oembed" frameborder="0" ></iframe>
-             <b>  
-             <iframe width=auto height=auto  src="https://www.youtube.com/embed/bIA8HEEUxZI?feature=oembed" frameborder="0" ></iframe>
-             <b>  
-             <iframe width=auto height=auto  src="https://www.youtube.com/embed/8Ls1RqHCOPw?feature=oembed" frameborder="0" ></iframe>  
-          </div>  
+          </div-->
+          <div class="col-md-4" >
+            <h3 style="padding-bottom:3%;padding-left:20%">TOP VIEWED THIS WEEK</h3>
+            {% for video in videoss %}
+              <a href="/videos/watch/{{ video._id.toString() }}">
+                <div class= "col-sm-12 col-md-12 ">
+                  <div class="panel">
+                    <div class="row">
+                      <div class="col-sm-4 col-md-4">
+                        <span class="thumbnail" style="margin-top:4%;">
+                          <img src="../../images/img_avatar2.jpg" alt="#">
+                        </span>
+                      </div>
+                      <div class="col-sm-8 col-md-8" >
+                        <span style:"margin-top:0% ;">
+                          <h4> {{ video.users[0].title }}</h4>
+                        </span>
+                        Shared By:&nbsp
+                        <span style="color:yellow;">
+                          {{video.users.length}} users
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              {% endfor %}
+          </div>
+
        </div>         
   </div>
   

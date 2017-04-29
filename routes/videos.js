@@ -49,49 +49,56 @@ router.get('/watch/:id', function(req, res, next) {
 			}
 		}
 		else{
-			var ip = user._userid.ip;
-			var path = user.url;
-			//console.log(path);
-			//console.log('+++++++');
-			//var port = 8887+random(0,1);
-			var port = 8888;
-			console.log(port);console.log(" 7777777");
-			var vidurl="http://"+ip+":"+port.toString()+path;
-			console.log(vidurl);
-			if(req.user){
-				//console.log(typeof id);console.log(id);
-				var oid= mongoose.Types.ObjectId(id);console.log('4232332');
-				//console.log(oid);console.log('4232332');
-				users.findOne({	'_id': req.user._id,
-					'upvoted': oid 
-				}, function(err, id1){
-					var up = false; var dn = false;
-					//console.log(id1);console.log('81390310933209');
-					if(id1){
-						up = true; 
-					}
-					else{
-						up = false;
-					}
-					users.findOne({ '_id': req.user._id,
-						'downvoted': oid 
+			videos.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  }  }
+            ).sort({ views: -1}).limit(10).exec( function(err,vides){
+                if (err){
+                  req.flash('error',err);
+                }
+            	console.log(vides);         
+				var ip = user._userid.ip;
+				var path = user.url;
+				//console.log(path);
+				//console.log('+++++++');
+				//var port = 8887+random(0,1);
+				var port = 8888;
+				console.log(port);console.log(" 7777777");
+				var vidurl="http://"+ip+":"+port.toString()+path;
+				console.log(vidurl);
+				if(req.user){
+					//console.log(typeof id);console.log(id);
+					var oid= mongoose.Types.ObjectId(id);console.log('4232332');
+					//console.log(oid);console.log('4232332');
+					users.findOne({	'_id': req.user._id,
+						'upvoted': oid 
 					}, function(err, id1){
+						var up = false; var dn = false;
 						//console.log(id1);console.log('81390310933209');
 						if(id1){
-							dn = true; 
+							up = true; 
 						}
 						else{
-							dn = false;
+							up = false;
 						}
-						//console.log(up);
-						//console.log(dn);
-						res.render('users/watch', {up : up, dn :dn, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user, vusrdata: user,videodata: video});
-					});
-				});	
-			}
-			else
-				res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, vusrdata: user, videodata: video });
-			//res.send(ip);	
+						users.findOne({ '_id': req.user._id,
+							'downvoted': oid 
+						}, function(err, id1){
+							//console.log(id1);console.log('81390310933209');
+							if(id1){
+								dn = true; 
+							}
+							else{
+								dn = false;
+							}
+							//console.log(up);
+							//console.log(dn);
+							res.render('users/watch', {videoss : vides, up : up, dn :dn, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user, vusrdata: user,videodata: video});
+						});
+					});	
+				}
+				else
+					res.render('videos/watch', {videoss : vides, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, vusrdata: user, videodata: video });
+				//res.send(ip);
+			});	
 		}
 	});
 });
