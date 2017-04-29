@@ -8,7 +8,7 @@ var flash = require('connect-flash');
 var request = require('request');
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
-
+var paginate = require('express-paginate');
 
 //models
 var users = mongoose.model('users');

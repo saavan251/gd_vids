@@ -1,0 +1,46 @@
+
+{% extends '../views/nav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
+      <link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/>
+      <style>
+        .heading{
+          display: flex;
+          content: space-between;
+          margin: 2% auto;
+          padding: 0% 5% 2% 5%;
+        }
+        .message{
+          color: red;
+          margin: 5% 0% 1% auto;
+        }
+      </style>
+ {% endblock%} 
+
+
+{% block contents %}
+  {% parent %}
+  <div class="search_results">
+    {% for video in videos %}
+    <a href="/videos/watch/{{ video._id.toString() }}">
+      <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
+        <div class="panel">
+          <div class="row">
+            <div class="col-sm-4 col-md-2">
+              <span class="thumbnail" style="margin: auto;">
+                <img src="images/img_avatar2.jpg" alt="img_avatar2">
+              </span>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <span class="caption">
+                <h3> {{ video.users[0].title }}</h3>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+ </div>
+{% endblock%}

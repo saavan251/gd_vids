@@ -3,94 +3,107 @@
  {% parent %}
     <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
       <link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/>
+      <style>
+      .btn-file {
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-file input[type=file] {
+          position: absolute;
+          top: 0;
+          right: 0;
+          min-width: 100%;
+          min-height: 100%;
+          font-size: 100px;
+          text-align: right;
+          filter: alpha(opacity=0);
+          opacity: 0;
+          outline: none;
+          background: white;
+          cursor: inherit;
+          display: block;
+        }
+</style>
  {% endblock%} 
  {% block contents %}
   {% parent %}
- <div class="container">
-    <h1>Edit Profile</h1>   
+ <div class="container col-md-10 col-md-offset-1">
+    <h1>Profile</h1>   
   	<hr>
-	<div class="row">
       <!-- left column -->
-      <div class="col-md-3">
-        <div class="text-center">
-          <img src="//placehold.it/100" class="avatar img-circle" alt="avatar">
-          <h6>Upload a different photo...</h6>
-          
-          <!--<input type="file" class="form-control" method="post"> -->
-          <form method="post" enctype="multipart/form-data" action="/upload">
-              <input type="file" name="file">
-              <input type="submit" value="Submit">
-          </form>
+        <div class="col-sm-12 col-md-6 col-ls-5 col-xs-12" style="margin: 2% auto;">
+            <div class="text-center">
+                 <div class="panel panel-success">
+                    <div class="panel-heading" style ="height:50px;"></div>
+                      <div class="panel-body">
+                        <img class="avatar img-thumbnail" src="../../uploads/{{st}}"  alt="avatar" width="75%" height="75%"> <!--width="100%" height="100%"-->
+                          <form method="post" enctype="multipart/form-data" action="/users/profile">                                
+                                <table style="margin:5% auto;">
+                                  <tr style="margin:5% auto;">
+                                      <td>&nbsp;</td>
+                                  </tr>
+                                  <tr style="margin:5% auto;">
+                                    <td><input  type="file" name='attach' id='attach' class="btn btn-primary btn-file" required="required" hidden></td>
+                                  </tr><td >&nbsp;</td>
+                                  <tr style="margin:5% auto;">
+                                  </tr>
+                                  <tr style="margin:5% auto;"><td><input type="submit"  value="Upload Image" class="btn btn-danger"></td></tr>
+                                  <tr style="margin:5% auto;"><td >&nbsp;</td>
+                                  </tr>
+                                </table>
+                          </form>
+                      </div>
+                  </div> 
+            </div>
         </div>
-      </div>
-      
-      <!-- edit form column -->
-      <div class="col-md-9 personal-info">
-        <div class="alert alert-info alert-dismissable">
-          <a class="panel-close close" data-dismiss="alert">×</a> 
-          <i class="fa fa-coffee"></i>
-          This is an <strong>.alert</strong>. Use this to show important messages to the user.
-        </div>
-        <h3>Personal info</h3>
-        
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-lg-3 control-label">First name:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" value="Jane">
+      <div class="col-sm-12 col-md-6 col-ls-7 col-ls-offset-2 col-md-offset-3 col-xs-12 personal-info" style="margin: 12% auto;"> <!--16%-->
+            <div class="panel-heading" style="border-radius: 0 0 10px 10px; box-shadow: 0 0 10px  #00ff00;">
+                      <center><p style="font-size:200%;">Account Details</p></center>
+                <hr/>
+                <table>
+                    <tr><td class="bold" style="font-size:200% ;"> IP</td><td style="font-size:200%; display:inline-block; 
+       margin-left: 40%;">{{userdata.ip}}</td>
+                    <tr><td class="bold" style="font-size:200% ;" > Name</td><td style="font-size:200%; display:inline-block; 
+       margin-left: 40%;"> {{userdata.full_name}}</td></tr><br/>
+                    <tr><td class="bold" style="font-size:200%;" > Nick</td><td style="font-size:200%;display:inline-block; 
+       margin-left: 40%;"> {{userdata.nick}}</td></tr>                    
+                    <tr><td class="bold" style="font-size:200%;" > Email</td><td style="font-size:200%;display:inline-block; 
+       margin-left: 40%;"> {{userdata.email}}</td></tr>
+                </table><br/>
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Last name:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" value="Bishop">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Company:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" value="">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Email:</label>
-            <div class="col-lg-8">
-              <input class="form-control" type="text" value="janesemail@gmail.com">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Time Zone:</label>
-            <div class="col-lg-8">
-              <div class="ui-select">
-                <select id="user_time_zone" class="form-control">
-                  <option value="Hawaii">(GMT-10:00) Hawaii</option>
-                  <option value="Alaska">(GMT-09:00) Alaska</option>
-                  <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-                  <option value="Arizona">(GMT-07:00) Arizona</option>
-                  <option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-                  <option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
-                  <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-                  <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Username:</label>
+  </div>
+</div>
+<hr>
+ {% endblock%} 
+
+ <!-- col-md-3 col-md-offset-2 -->
+ <!--div class="col-md-offset-3">
+          <legend>Personal Info</legend>
+         </div>
+        style="border-radius: 0 0 10px 10px; box-shadow: 10 0 10px #aaa;"
+        <form class="form-horizontal" role="form" style="margin:6% auto;">
+          <div class="form-group">                                                  
+            <label class="col-md-3 control-label">Full name:</label>
             <div class="col-md-8">
-              <input class="form-control" type="text" value="janeuser">
+              <input class="form-control" type="text" value="" placeholder="{{userdata.full_name}}" disabled>
             </div>
           </div>
           <div class="form-group">
+            <label class="col-md-3 control-label">Email:</label>
+            <div class="col-md-8">
+              <input class="form-control" type="text" value="" placeholder="{{userdata.email}}" disabled>
+            </div>
+          </div>
+          <!--div class="form-group">
             <label class="col-md-3 control-label">Password:</label>
             <div class="col-md-8">
-              <input class="form-control" type="password" value="11111122333">
+              <input class="form-control" type="password" value="">
             </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-3 control-label">Confirm password:</label>
+          </div-->
+          <!--div class="form-group">
+            <label class="col-md-3 control-label">IP:</label>
             <div class="col-md-8">
-              <input class="form-control" type="password" value="11111122333">
+              <input class="form-control" type="text" value="" placeholder="{{userdata.ip}}" disabled>
             </div>
           </div>
           <div class="form-group">
@@ -102,8 +115,4 @@
             </div>
           </div>
         </form>
-      </div>
-  </div>
-</div>
-<hr>
- {% endblock%} 
+      </div-->
