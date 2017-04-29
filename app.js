@@ -25,6 +25,7 @@ fs.readdirSync(__dirname + '/models').forEach(function(filename) {
 var index = require('./routes/index');
 var users = require('./routes/users');
 var videos = require('./routes/videos');
+var update = require('./routes/update');
 
 
 var app = express();
@@ -57,6 +58,7 @@ app.use(passport.session());
 app.use('/', index);
 app.use('/users', users);
 app.use('/videos', videos);
+app.use('/update', update);
 
 
 

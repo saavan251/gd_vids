@@ -1,0 +1,51 @@
+{% extends 'usernav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/like.css">
+    <link rel="stylesheet" type="text/css" href="/css/extra.css">
+    <style>
+    
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
+</style>
+ {% endblock%} 
+
+{% block contents %}
+ {% parent %}
+   <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="error-template">
+                <h1>
+                    Oops!</h1>
+                <h2>
+                    404 Not Found</h2>
+                <div class="error-details">
+                    {% if success.length>0 %}
+                      {{success[0]}}
+                      {% endif %}
+                      {% if error.length>0 %}
+                      {{error[0]}}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  
+ 
+
+
+ {% endblock%}
+
+
+
+
+
+
+
+
+
+
+

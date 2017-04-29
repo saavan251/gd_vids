@@ -46,7 +46,7 @@ router.get('/index',function(req,res,next){
 
 	  videos.aggregate([
    	     {$sort: {views: -1}},
-   	     {$limit: 2}
+   	     {$limit: 10}
    	]).exec( function(err,vids){
 		    if (err){
 		    	//console.log("1");
@@ -62,7 +62,7 @@ router.get('/index',function(req,res,next){
             {
                 videos.aggregate([
                   {$sort: { _id: -1}},
-                  {$limit: 2}
+                  {$limit: 10}
                 ]).exec( function(err,vides){
                        if (err){
                                  req.flash('error',err);
@@ -178,6 +178,7 @@ router.post('/editprofile', function(req, res, next) {
 		}
 	});
 });
+
 router.post('/search',function(req,res){
 	console.log("++++++++++++++++++");
 	console.log(req.body);
@@ -212,20 +213,22 @@ router.post('/search',function(req,res){
 	});
 //res.send("success");
 });
-router.post('/refresh', function(req, res, next) {
+
+router.post('/delvid', function(req, res, next) {
 	var ip = req.user.ip;
-	var url="http://"+ip+"/vidserve/list.html";
+	var port = 8887+random(0,1);
+	var url="http://"+ip+":"+port.toString()+"/dellist.html";
 	//console.log(url);
 	request.get(url, function(err, httpres, body){
-		var array = body.split('"');
-		var data = array[1].split('$');
+		var array = body.split('"""');
+		var data = array[1].split('$$$');
 		if(err){
 			console.log(err);
 			req.flash('error', 'some internal error in refreshing file');
 			res.redirect('settings');
 		}
 		else{
-			for (i in data){
+			for (i=0; i< (data.length-1); i++){
 				updateeach(data[i], req.user, array, req, res);
 			}
 			req.flash('success', 'successfully refreshed the file');
@@ -235,9 +238,69 @@ router.post('/refresh', function(req, res, next) {
 
 });
 
+router.post('/refresh', function(req, res, next) {
+	var ip = req.user.ip;
+	var port = 8887+random(0,1);
+	var url="http://"+ip+":"+port.toString()+"/mylist.html";
+	//console.log(url);
+	request.get(url, function(err, httpres, body){
+		var array = body.split('"""');
+		var data = array[1].split('$$$');
+		if(err){
+			console.log(err);
+			req.flash('error', 'some internal error in refreshing file');
+			res.redirect('settings');
+		}
+		else{
+			for (i=0; i< (data.length-1); i++){
+				updateeach(data[i], req.user, array, req, res);
+			}
+			req.flash('success', 'successfully refreshed the file');
+			res.redirect('settings');
+		}
+	});
+});
+
+router.post('/addvid', function(req, res, next) {
+	var username = req.body.nick;
+  	var password = req.body.password;
+	users.findOne( { 'nick' : username},function(err, user) {
+	    //console.log(moment());
+	    if (err) {
+	      res.send('attendance error');
+	    }
+	    else if(!user) {
+	      res.send('sorry you are not registered');
+	    }
+	    else if (!isValidPassword(user, password)){
+	      res.send('sorry incorrect password');
+	    }
+	    else{
+	      	var ip = user.ip;
+			var port = 8887+random(0,1);
+			var url="http://"+ip+":"+port.toString()+"/addlist.html";
+			//console.log(url);
+			request.get(url, function(err, httpres, body){
+				var array = body.split('"""');
+				var data = array[1].split('$$$');
+				if(err){
+					console.log(err);
+					res.send('error in updation');
+				}
+				else{
+					for (i=0; i< (data.length-1); i++){
+						updateeach(data[i], req.user, array, req, res);
+					}
+					res.send('successfully updated');
+				}
+			});
+	    }
+	  });
+});
+
 
 var updateeach = function(data, user,array, req, res){
-	var elem=data.split(',');
+	var elem=data.split(',,,,');
 	//console.log(elem[0]);
 	//console.log(elem[1]);
 	var userid = user._id;
@@ -308,10 +371,13 @@ var updateeach = function(data, user,array, req, res){
 		}
 		//console.log('------------');
 	});
-
 }
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
+
+function random (low, high) {
+    return Math.floor(Math.random() * (high - low + 1) + low);
 }
 
 module.exports = router;

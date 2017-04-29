@@ -12,14 +12,17 @@
        <div class="row" >
            <div class="col-md-8">
               <!--iframe width=100% height=500 style="margin-top:5%; margin-right:5%" src="{{vidurl}}" frameborder="0" allowfullscreen></iframe-->
-              <video height="100%" width="100%" style="margin-top:5%; margin-right:5%" controls frameborder="0" allowfullscreen>
-                <source src="{{vidurl}}" type="video/mp4" />
+              <video height="100%" width="100%" style="margin-top:5%; margin-right:5%" controls frameborder="0" autoplay="true" >
+                <source src="{{vidurl}}" type="video/mp4" onerror="alert('user unavailable')" loop>
+                Your browser does not support this video player, please consider upgrading to a modern browser or contact your sysadmin.
               </video>
               <ul class="list-group" style="margin-top:2%;">
                 <li class="list-group-item"><span class="videotitle"> {{vusrdata.title}}
                   <span class="label label-primary col-md-offset-1 col-sm-offset-1">
                     <span class="badge" >{{videodata.views}} </span> views</span>
                   </span>
+                  <span class="col-md-offset-1 col-sm-offset-1 " style="margin-top:2%;">
+                     Shared By:<span style="color:yellow;">{{" "+vusrdata._userid.nick}}</span></span
                 </li>
               </ul>
             </div>

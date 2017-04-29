@@ -1,4 +1,4 @@
-{% extends 'usernav.html' %}
+{% extends '../views/nav.html' %}
 {% block customCSS %}
  {% parent %}
     <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
@@ -33,7 +33,11 @@
             </div>
             <div class="col-sm-7 col-md-9" >
               <span style:"margin-top:10% auto;">
-                <h4> {{ video.users[0].title }}</h4>
+                <h4> {{ video.users[video.users.length-1].title }}</h4>
+              </span>
+              Shared By:
+              <span style="color:yellow;">
+                {{video.users[video.users.length-1]._userid.nick}}
               </span>
             </div>
           </div>
@@ -52,7 +56,7 @@
     </li>
     {% for i in a %}
     <li>
-     <a href="/search?title={{qry.title}}&page={{i}}">{{i}}</a>
+     <a href="/latest?page={{i}}">{{i}}</a>
    </li>
     {% endfor %}
     <li>

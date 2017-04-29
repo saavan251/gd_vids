@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
    videos.aggregate([
    	     {$sort: {_id: -1}},
    	     {$limit: 5}
-   	]).exec( function(err,vids){  
+   	]).exec( function(err,vids){
 		    if (err){
 		    	//console.log("1");
             	req.flash('error',err);
@@ -125,7 +125,7 @@ router.get('/search',function(req,res){
         res.redirect('');
       }
       else{
-          var a = [];var limiting =3;
+          var a = [];var limiting =10;
           var plength = videoss.length;
           for (var i = 0; i < plength/limiting; i++) {
             a.push(i);
@@ -153,19 +153,49 @@ router.get('/search',function(req,res){
                     else
                     {
                       console.log("3aaaaaaaaaa");
-                      console.log(vids[0].users);
+                      console.log(vids[vids.length-1].users);
                       if(req.user)
-                        res.render('users/search',{a:a, videos:vids, qry: req.query});
+                        res.render('users/search',{userdata: req.user, a:a, videos:vids, qry: req.query});
                       else
-                        res.render('search', {a:a, videos: vids, qry: req.query});
+                        res.render('search', {userdata: req.user, a:a, videos: vids, qry: req.query});
                     }
                   });
 
               }
             });
 	});
-router.get('/latest', function(req, res) {
 
+router.get('/latest', function(req, res) {
+  var a = [];
+  var limiting =10;
+  var plength = 40;
+  for (var i = 0; i < plength/limiting; i++) {
+    a.push(i);
+  }
+  console.log(a);
+  console.log('ggggg');
+  if(!req.query.page){
+    page=0;
+  }
+  else
+    page= req.query.page;
+  console.log(page);
+  var skipping = page*limiting;
+  videos.find({}).populate('users._userid').skip(skipping).limit(limiting).sort({'_id': -1}).exec( function(err,vids){
+    if (err){
+      console.log("1aaaaaaaaa");
+      req.flash('error',err);
+      res.redirect('settings');
+    }
+    else{
+      console.log("3aaaaaaaaaa");
+      console.log(vids[0].users);
+      if(req.user)
+        res.render('users/latest',{userdata: req.user, a:a, videos:vids, qry: req.query});
+      else
+        res.render('latest', {userdata: req.user, a:a, videos: vids, qry: req.query});
+   }
+  });
 });
 
 router.get('/about', function(req, res) {

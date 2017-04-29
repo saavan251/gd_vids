@@ -1,3 +1,44 @@
-<h1>{{ message }}</h1>
-<h2>{{ error.status }}</h2>
-<pre>{{ error.stack }}</pre>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>GAMEDRONE</title> 
+    <meta name="description" content="gamedrone app">
+    <link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/>
+    <style>
+      .error-template {padding: 15% 15%;text-align: center;}
+      .error-actions {margin-top:15%;margin-bottom:8%;}
+      .error-actions .btn { margin-right:10%; }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="error-template">
+                  <h1>
+                      Oops!</h1>
+                  <h2>
+                      404 Not Found</h2>
+                  <div class="error-details">
+                      {% if success.length>0 %}
+                        {{success[0]}}
+                        {% endif %}
+                        {% if error.length>0 %}
+                        {{error[0]}}
+                      {% endif %}
+                  </div>
+                  <div class="error-actions">
+                    <a href="/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
+                        Gamedrone </a><a href="/latest" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-music"></span> Latest Contents </a>
+                </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <h1>{{ message }}</h1>
+  <h2>{{ error.status }}</h2>
+  <pre>{{ error.stack }}</pre>
+</body>

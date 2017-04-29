@@ -30,55 +30,91 @@ router.get('/', function(req, res, next) {
 
 router.get('/watch/:id', function(req, res, next) {
 	//var val = req.query.id;
-	console.log(req.params.id);
+	//console.log(req.params.id);
+	console.log(req.session);
 	var id = req.params.id;
 	videos.update({ '_id' : id}, {$inc : { views : 1 }}).exec();
 	videos.findOne( { '_id' : id}).populate('users._userid').exec( function(err, video){
-		console.log(video);
+		//console.log(video);
 		var user = selectuser(video.users);
 		console.log(user);
-		var ip = user._userid.ip;
-		var path = user.url;
-		//console.log(path);
-		//console.log('+++++++');
-		var vidurl="http://"+ip+":8888/"+path;
-		console.log(vidurl);
-		if(req.user){
-			//console.log(typeof id);console.log(id);
-			var oid= mongoose.Types.ObjectId(id);console.log('4232332');
-			//console.log(oid);console.log('4232332');
-			users.findOne({	'_id': req.user._id,
-				'upvoted': oid 
-			}, function(err, id1){
-				var up = false; var dn = false;
-				console.log(id1);console.log('81390310933209');
-				if(id1){
-					up = true; 
-				}
-				else{
-					up = false;
-				}
-				users.findOne({ '_id': req.user._id,
-					'downvoted': oid 
+		if(user == false){
+			if(req.user){
+				req.flash('error','No user to display from');
+				res.render('users/message', {error : req.flash('error'), success: req.flash('success'), userdata: req.user});
+			}
+			else{
+				req.flash('error','No user to display from');
+				res.render('message', {error : req.flash('error'), success: req.flash('success'),});
+			}
+		}
+		else{
+			var ip = user._userid.ip;
+			var path = user.url;
+			//console.log(path);
+			//console.log('+++++++');
+			//var port = 8887+random(0,1);
+			var port = 8888;
+			console.log(port);console.log(" 7777777");
+			var vidurl="http://"+ip+":"+port.toString()+path;
+			console.log(vidurl);
+			if(req.user){
+				//console.log(typeof id);console.log(id);
+				var oid= mongoose.Types.ObjectId(id);console.log('4232332');
+				//console.log(oid);console.log('4232332');
+				users.findOne({	'_id': req.user._id,
+					'upvoted': oid 
 				}, function(err, id1){
-					console.log(id1);console.log('81390310933209');
+					var up = false; var dn = false;
+					//console.log(id1);console.log('81390310933209');
 					if(id1){
-						dn = true; 
+						up = true; 
 					}
 					else{
-						dn = false;
+						up = false;
 					}
-					console.log(up);
-					console.log(dn);
-					res.render('users/watch', {up : up, dn :dn, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user, vusrdata: user,videodata: video});
-				});
-			});	
+					users.findOne({ '_id': req.user._id,
+						'downvoted': oid 
+					}, function(err, id1){
+						//console.log(id1);console.log('81390310933209');
+						if(id1){
+							dn = true; 
+						}
+						else{
+							dn = false;
+						}
+						//console.log(up);
+						//console.log(dn);
+						res.render('users/watch', {up : up, dn :dn, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user, vusrdata: user,videodata: video});
+					});
+				});	
+			}
+			else
+				res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, vusrdata: user, videodata: video });
+			//res.send(ip);	
 		}
-		else
-			res.render('videos/watch', {error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, vusrdata: user, videodata: video });
-		//res.send(ip);	
 	});
 });
+
+var selectuser = function(users, lserved){
+	console.log('88888888888888888');
+	console.log(users);
+	var arr = [];
+	for(var i=0; i<users.length; i++){
+		if(Date.now()-users[i]._userid.lastseen<1000*60*40){
+			arr.push(i);
+		}
+	}
+	//console.log(arr.length);
+	var choice = random(0,arr.length-1);
+	//console.log(choice);
+	//console.log(arr);
+	console.log('88888888888888888');
+	if(arr.length>0)
+		return users[ arr[choice] ];
+	else
+		return false;
+}
 
 /*router.get('/watch', function(req, res, next) {
 	//var val = req.query.id;
@@ -264,8 +300,11 @@ router.get('/upvoted/:id/:toggle', function(req, res, next) {
 	}
 });*/
 
-var selectuser = function(users){
-	return users[0];
+
+
+function random (low, high) {
+    return Math.floor(Math.random() * (high - low + 1) + low);
 }
+
 
 module.exports = router;

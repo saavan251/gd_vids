@@ -14,7 +14,7 @@
         <div class="panel-heading"><center>RECENT CONTENTS</center></div>
         <div class="panel-body" id="panel">
           <div class="table-responsive">          
-            {% for video in videos %}
+            {% for video in videoss %}
                <a href="/videos/watch/{{ video._id.toString() }}">
                  <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-10 ">
                     <div class="row">
@@ -22,7 +22,7 @@
                           <img src="/images/img_avatar2.jpg" alt="#">
                         </span>
                         <span class="container col-sm-6 col-md-9" style="margin: auto;padding: auto;">
-                          <h3 style="margin: 2% auto"> {{ video.users[0].title }}</h3>
+                          <h4 style="margin: 2% auto"> {{ video.users[0].title }}</h4>
                         </span>
                     </div>
                   </div>
@@ -37,7 +37,7 @@
           <div class="panel-heading"><center>WEEKLY TOP CHART</center></div>
           <div class="panel-body" id="panel">
             <div class="table-responsive">          
-              {% for video in videoss %}
+              {% for video in videos %}
                  <a href="/videos/watch/{{ video._id.toString() }}">
                    <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-10 ">
                       <div class="row">
@@ -45,7 +45,7 @@
                             <img src="/images/img_avatar2.jpg" alt="#">
                           </span>
                           <span class="container col-sm-6 col-md-9" style="margin: auto;padding: auto;">
-                            <h3 style="margin: 2% auto"> {{ video.users[0].title }}</h3>
+                            <h4 style="margin: 2% auto"> {{ video.users[0].title }}</h4>
                           </span>
                       </div>
                     </div>
