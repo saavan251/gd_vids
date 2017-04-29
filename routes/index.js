@@ -1,15 +1,22 @@
-var express = require('express');
-var router = express.Router();
-var passport = require('./auth.js');
-var mongoose = require('mongoose');
-var bCrypt = require('bcrypt-nodejs');
-
-var users = mongoose.model('users');
-var multer  = require('multer');
-var upload = multer({ dest: 'public/uploads/' });
-var videos = mongoose.model('videos');
-var paginate = require('express-paginate');
+var express = require('express'); 
+var router = express.Router(); 
+var passport= require('./auth.js'); 
+var mongoose = require('mongoose'); 
+var bCrypt =require('bcrypt-nodejs'); 
+var fs = require('fs'); 
+var path=require('path');
+var users = mongoose.model('users'); 
+var bodyParser = require('body-parser');
+var multer  = require('multer'); 
+var videos = mongoose.model('videos'); 
+var paginate = require('express-paginate'); 
 /* GET home page. */
+router.get('/about',function(req, res, next){
+     if(req.user)
+          res.render('users/about',{userdata: req.user});
+      else
+           res.render('about');
+});
 router.get('/', function(req, res, next) {
   // var v1 = null;
    videos.aggregate([
@@ -210,7 +217,7 @@ router.get('/sharers', function(req, res) {
 
 });
 */
-
+/*
 router.post('/search',function(req,res){
  
   var title =req.body.title;
@@ -224,6 +231,7 @@ router.post('/search',function(req,res){
               res.redirect('settings');
             }
             else
+<<<<<<< HEAD
         {
               console.log("got");
               console.log(user._id);
@@ -252,11 +260,21 @@ router.post('/search',function(req,res){
                             else
                                 res.render('search', {videos: vids});
                          }
+=======
+            {
+            	//console.log("3");
+            	console.log(vids[0].users);
+            	if(req.user)
+            		res.render('users/search',{videos:vids,userdata: req.user});
+            	else
+            		res.render('search', {videos: vids});
+            }
+>>>>>>> profile added
 
                 });
 
         }
-
+*/
 
 
   });

@@ -4,20 +4,77 @@ var router = express.Router();
 var passport = require('./auth.js');
 var mongoose = require('mongoose');
 var fs = require('fs');
+var path=require('path');
 var flash = require('connect-flash');
 var multer  = require('multer');
 var request = require('request');
 var bCrypt = require('bcrypt-nodejs');
 var moment = require('moment');
 var paginate = require('express-paginate');
-//app.use(paginate.middleware(10, 50));
-//models
 var users = mongoose.model('users');
 var videos = mongoose.model('videos');
+var fileUpload = false;
+var fileFilter = false;
+var storage = multer.diskStorage({
+
+destination: function (req, file, cb) {  
+      if (file.fieldname == 'attach')     
+           cb(null, 'public/uploads/') 
+      },
+  filename: function (req, file, cb) {        
+    if(file.mimetype=="image/jpeg")
+    {             
+       cb(null, req.user.nick + '.jpg'); 
+    }
+    else if(file.mimetype=="image/png")           
+    {             
+        cb(null, req.user.nick + '.png');          
+    }  
+  }
+});  
+var fileFilter = function(req,file,cb){
+  fileUpload = true;
+  console.log(file);
+  console.log('++++');
+  if (file.mimetype=="image/jpeg") {
+    cb(null,true);
+  } else {
+    fileFilter = true;
+    cb(null,false);
+  }
+
+}  
+var uploads = multer({ storage: storage,
+  fileFilter:fileFilter,
+  limits:{
+    fileSize: 5000*5000
+  } 
+});
+var upload = uploads.fields([{ name: 'attach' }]);
+/*var s,str;
+var pos;
+router.post('/upload', upload.single('file'), function (req, res, next){
+    //res.send(req.file);
+    str="";s="";
+    s+=req.file.filename;
+    //console.log(s);
+    for(var i=0;i<s.length;i++)
+    {
+          if(s[i]=='.')
+            pos=i;
+    }
+     for(var i=pos;i<s.length;i++)
+    {
+       str+=s[i];
+    }
+    str=req.user.nick+str;
+    console.log(str);
+    res.render('users/profile.html', {userdata: req.user,st:str});
+});*/
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
- // res.render('videos');
+  //res.render('about');
 });
 
 router.use(function(req, res, next) {
@@ -83,6 +140,12 @@ router.get('/index',function(req,res,next){
 router.get('/forgot',function(req, res, next){
 	res.render('users/forgot');
 });
+router.get('/about',function(req, res, next){
+     if(req.user)
+          res.render('users/about',{userdata: req.user});
+      else
+           res.render('about');
+});
 
 router.get('/settings', function( req, res, next){
 	//console.log(req.user.nick+' user -------------------');
@@ -91,17 +154,83 @@ router.get('/settings', function( req, res, next){
 	res.render('users/settings', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 });
 router.get('/profile', function( req, res, next){
-	//console.log(req.user.nick+' user -------------------');
+	console.log(req.user.nick+'.jpg');
 	//console.log('---------------');
 	//console.log(req.user);
-	res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
+	//console.log(fs.existsSync(__dirname+"/index.js"));
+	//console.log(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".jpg")));
+	if(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".jpg"))){
+		var str = req.user.nick+".jpg";
+	   res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st:str});
+	}
+	/*else if(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".png"))){
+		var str = req.user.nick+".png";
+	   res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st:str});
+	}*/
+	else{
+		var str = "circle.jpg";
+	 res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st: str });
+	}
 });
-
+router.post('/profile',function(req, res, next) {
+	upload(req, res, function (err) {
+		var file = false;
+	    if (err) {
+	      console.log(err.message);
+	      console.log('+++++++++++');
+	      req.flash('error',err.message.toString());
+	      res.render('users/profile',{userdata: req.user ,st:req.user.nick+".jpg"});
+	    }
+	    else if(fileFilter==true){
+	    	console.log('++++---');
+	    	fileFilter = false;
+	    	req.flash('error','Error Uploading Document. Invalid File-Type.');
+	      	res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
+	    }else if(fileUpload==true && req.files.attach==null){
+	    	console.log('++++****');
+	    	fileUpload = false;
+	    	req.flash('error','Error Uploading Document. Max File-Size Exceeded.');
+	      	res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
+	      }
+	    else if(req.body.message == '' && req.files.attach==null){
+	    	console.log('++++/////');
+	    	req.flash('error','Please Enter a Message.');
+	      	res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
+	      }
+	    else{
+			//console.log(req.body);
+			//console.log(req.files);
+			console.log('++');
+			var message = req.body.message;
+			var originalname,name;
+			if (req.files.attach!=null) {
+				file = true;
+				name = req.files.attach[0].filename;
+				originalname = req.files.attach[0].originalname;
+			} else {
+				originalname=null;
+				name=null;
+			}
+			users.update({_id: req.user},{
+			  	$push: {
+	        	"profile": {
+	        		text: message,
+        			timestamp: Date.now() ,
+        			_file : file ,
+	        		file : name,
+	        		orignalfile : originalname
+	        	}
+	        }
+			});
+			res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
+		}
+	});
+});
 //update password to synchronise with dchub
 router.post('/passupdate', function(req, res, next) {
 	//console.log(req);
 	//res.send(req.body);
-	//console.log(req.body);
+	//conso/le.log(req.body);
 	//console.log("---------------")
 	var username = req.user.nick;
 	var password = req.body.password;
@@ -202,7 +331,7 @@ router.post('/search',function(req,res){
             	//console.log("3");
             	//console.log(vids[0].users);
             	if(req.user)
-            		res.render('users/search',{videos:vids,userdata: req.user});
+            		res.render('users/search',{videos: vids , userdata: req.user});
             	else
             		res.render('search', {videos: vids});
             }
@@ -367,6 +496,18 @@ var updateeach = function(data, user,array, req, res){
 			}
 		}
 		//console.log('------------');
+	});
+}
+function userValidate(req,res,next){
+	//console.log(req.user);
+	users.findOne(req.user,function(err, user) {
+		if(user!=null){
+			req.session.user = user;
+			next();
+		}
+		else {
+      		res.redirect('/');
+		}
 	});
 }
 var createHash = function(password){
