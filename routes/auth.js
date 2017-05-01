@@ -14,7 +14,7 @@ var router = express.Router();
 
 
 passport.serializeUser(function(user,done){
-	console.log('serializing user..'+user);
+	console.log('serializing user..'+user.nick);
 	done(null,user.nick);
 });
 
@@ -76,60 +76,14 @@ passport.use('userlogin',new LocalStrategy(
                     return done(null, false, { message: 'Login Disabled for this user.Contact Admin for support.' });
                 }*/
                 else {
-                return done(null, user);
-            }
+                	return done(null, user);
+            	}
             }
         );
 
     })
 );
 
-/*router.post('/',function(req, res, next){
-	var usr=req.body.uname;
-	var psw=req.body.psw;
-
-	users.findOne({nick: usr},function(err, user){
-		if(!user){
-			var url="http://172.16.86.222:13000/login?nick="+usr+"&password="+psw+"&secret=qwerty";
-			request.get(url,function(err, httpres, body){
-				body = JSON.parse(body);
-				console.log(body);
-				if(err){
-					console.log(err);
-					res.send("some internal error has occured");
-				}
-				else{
-					if(body.error && body.error.length>0){
-					res.render('signin',{message : body.error});
-					}	
-					else{
-						var user = new users({
-						full_name: body.fullname,
-						nick: body.nick,
-						level: body.level,
-						password: createHash(psw)
-					}) ;
-					user.save(function(err, user){
-						if(err){
-							console.log(err);
-							//res.send('database error');
-						}
-					});
-					res.redirect('../users/index?token='+body.fullname);
-						//res.render('users/index',{uname: body.fullname});
-					}
-
-				}
-				
-			});
-		}
-		else{
-			res.redirect('../users/index?token='+usr);
-		}
-	});
-
-});
-*/
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }

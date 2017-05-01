@@ -16,7 +16,7 @@ var videos = mongoose.model('videos');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  	res.send('respond with a resource');
 });
 
 /*router.use(function(req, res, next) {
@@ -31,37 +31,49 @@ router.get('/', function(req, res, next) {
 router.get('/watch/:id', function(req, res, next) {
 	//var val = req.query.id;
 	//console.log(req.params.id);
-	console.log(req.session);
+	//console.log(req.session);
 	var id = req.params.id;
-	videos.update({ '_id' : id}, {$inc : { views : 1 }}).exec();
-	videos.findOne( { '_id' : id}).populate('users._userid').exec( function(err, video){
+	videos.update({ 
+		'_id' : id
+	}, {
+		$inc : { 
+			views : 1 
+		}
+	}).exec();
+	videos.findOne( { 
+		'_id' : id
+	}).populate('users._userid').exec( function(err, video){
 		//console.log(video);
 		var user = selectuser(video.users);
-		console.log(user);
+		//console.log(user);
 		if(user == false){
 			if(req.user){
-				req.flash('error','No user to display from');
+				req.flash('error','No user currently available with this video');
 				res.render('users/message', {error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 			}
 			else{
-				req.flash('error','No user to display from');
+				req.flash('error','No user currently available with this video');
 				res.render('message', {error : req.flash('error'), success: req.flash('success'),});
 			}
 		}
 		else{
-			videos.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  }  }
-            ).sort({ views: -1}).limit(10).exec( function(err,vides){
+			videos.find({ 
+				$where: function () { 
+					return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  
+				}  
+			}).sort({ views: -1}).limit(10).exec( function(err,vides){
                 if (err){
                   req.flash('error',err);
                 }
-            	console.log(vides);         
+            	//console.log(vides);         
 				var ip = user._userid.ip;
 				var path = user.url;
 				//console.log(path);
 				//console.log('+++++++');
 				//var port = 8887+random(0,1);
 				var port = 8888;
-				console.log(port);console.log(" 7777777");
+				//console.log(port);
+				//console.log(" 7777777");
 				var vidurl="http://"+ip+":"+port.toString()+path;
 				console.log(vidurl);
 				if(req.user){
@@ -104,19 +116,20 @@ router.get('/watch/:id', function(req, res, next) {
 });
 
 var selectuser = function(users, lserved){
-	console.log('88888888888888888');
-	console.log(users);
+	//console.log('88888888888888888');
+	//console.log(users);
 	var arr = [];
 	for(var i=0; i<users.length; i++){
 		if(Date.now()-users[i]._userid.lastseen<1000*60*40){
 			arr.push(i);
 		}
 	}
+	//console.log('88888888888888888');
 	//console.log(arr.length);
 	var choice = random(0,arr.length-1);
 	//console.log(choice);
-	//console.log(arr);
-	console.log('88888888888888888');
+	console.log(arr);
+	//console.log('88888888888888888');
 	if(arr.length>0)
 		return users[ arr[choice] ];
 	else
@@ -149,12 +162,12 @@ var selectuser = function(users, lserved){
 
 router.get('/downvoted/:id/:toggle', function(req, res, next) {
 	//var val = req.query.id;
-	console.log(req.params.id);
+	//console.log(req.params.id);
 	var id = req.params.id;
 	var toggle = req.params.toggle;
 	if(toggle ==0 ){
-		users.update(
-			{'_id' : req.user._id},{
+		users.update({
+			'_id' : req.user._id},{
 	            $addToSet:{ 
 	                'downvoted': id
 	            } 
@@ -165,15 +178,19 @@ router.get('/downvoted/:id/:toggle', function(req, res, next) {
 					res.redirect('/users/index');
                 }
                 else{
-                	console.log(result);
-	    			console.log('============');
+                	//console.log(result);
+	    			//console.log('============');
                 	if(result.nModified == 1){
-	            		videos.update({ '_id' : id}, {$inc : { downvotes : 1 }}).exec();
+	            		videos.update({ 
+	            			'_id' : id
+	            		}, {
+	            			$inc : { 
+	            				downvotes : 1 
+	            			}
+	            		}).exec();
 	            	}
                 	
                 }
-                //console.log("######");
-                //console.log(result);
         });
 	}
 	else if(toggle == 1){
@@ -189,26 +206,32 @@ router.get('/downvoted/:id/:toggle', function(req, res, next) {
 	    				res.redirect('users/index');
 	    			}
 	    			else{
-	    				console.log(resultp);
-		    			console.log('=========++');
+	    				//console.log(resultp);
+		    			//console.log('=========++');
 		            	if(resultp.nModified == 1){
-		            		videos.update({ '_id' : id}, {$inc : { downvotes : -1 }}).exec();
+		            		videos.update({ 
+		            			'_id' : id
+		            		}, {
+		            			$inc : { 
+		            				downvotes : -1 
+		            			}
+		            		}).exec();
 		            	}
 	    			}
 	            }
 	        );
 	}
-	res.send('downvoted');
+	res.redirect('/videos/watch/'+id);
 });
 
 router.get('/upvoted/:id/:toggle', function(req, res, next) {
 	//var val = req.query.id;
-	console.log(req.params.id);
+	//console.log(req.params.id);
 	var id = req.params.id;
 	var toggle = req.params.toggle;
 	if(toggle ==0 ){
-		users.update(
-			{'_id' : req.user._id},{
+		users.update({
+			'_id' : req.user._id},{
 	            $addToSet:{ 
 	                'upvoted': id
 	            } 
@@ -219,10 +242,16 @@ router.get('/upvoted/:id/:toggle', function(req, res, next) {
 					res.redirect('/users/index');
                 }
                 else{
-                	console.log(result);
-	    			console.log('============');
+                	//console.log(result);
+	    			//console.log('============');
                 	if(result.nModified == 1){
-	            		videos.update({ '_id' : id}, {$inc : { upvotes : 1 }}).exec();
+	            		videos.update({ 
+	            			'_id' : id
+	            		}, {
+	            			$inc : { 
+	            				upvotes : 1 
+	            			}
+	            		}).exec();
 	            	}
                 	
                 }
@@ -243,16 +272,22 @@ router.get('/upvoted/:id/:toggle', function(req, res, next) {
 	    				res.redirect('users/index');
 	    			}
 	    			else{
-	    				console.log(resultp);
-		    			console.log('=========++');
+	    				//console.log(resultp);
+		    			//console.log('=========++');
 		            	if(resultp.nModified == 1){
-		            		videos.update({ '_id' : id}, {$inc : { upvotes : -1 }}).exec();
+		            		videos.update({
+		            		 '_id' : id
+		            		}, {
+		            			$inc : {
+		            			 upvotes : -1 
+		            			}
+		            		}).exec();
 		            	}
 	    			}
 	            }
 	        );
 	}
-	res.send('upvoted');
+	res.redirect('/videos/watch/'+id);
 });
 
 /*router.get('/upvoted/:id', function(req, res, next) {
@@ -307,11 +342,8 @@ router.get('/upvoted/:id/:toggle', function(req, res, next) {
 	}
 });*/
 
-
-
 function random (low, high) {
     return Math.floor(Math.random() * (high - low + 1) + low);
 }
-
 
 module.exports = router;

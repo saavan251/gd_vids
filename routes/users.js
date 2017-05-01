@@ -15,69 +15,14 @@ var users = mongoose.model('users');
 var videos = mongoose.model('videos');
 var fileUpload = false;
 var fileFilter = false;
-var storage = multer.diskStorage({
 
-destination: function (req, file, cb) {  
-      if (file.fieldname == 'attach')     
-           cb(null, 'public/uploads/') 
-      },
-  filename: function (req, file, cb) {        
-    if(file.mimetype=="image/jpeg")
-    {             
-       cb(null, req.user.nick + '.jpg'); 
-    }
-    else if(file.mimetype=="image/png")           
-    {             
-        cb(null, req.user.nick + '.png');          
-    }  
-  }
-});  
-var fileFilter = function(req,file,cb){
-  fileUpload = true;
-  console.log(file);
-  console.log('++++');
-  if (file.mimetype=="image/jpeg") {
-    cb(null,true);
-  } else {
-    fileFilter = true;
-    cb(null,false);
-  }
-
-}  
-var uploads = multer({ storage: storage,
-  fileFilter:fileFilter,
-  limits:{
-    fileSize: 5000*5000
-  } 
-});
-var upload = uploads.fields([{ name: 'attach' }]);
-/*var s,str;
-var pos;
-router.post('/upload', upload.single('file'), function (req, res, next){
-    //res.send(req.file);
-    str="";s="";
-    s+=req.file.filename;
-    //console.log(s);
-    for(var i=0;i<s.length;i++)
-    {
-          if(s[i]=='.')
-            pos=i;
-    }
-     for(var i=pos;i<s.length;i++)
-    {
-       str+=s[i];
-    }
-    str=req.user.nick+str;
-    console.log(str);
-    res.render('users/profile.html', {userdata: req.user,st:str});
-});*/
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
   //res.render('about');
 });
 
-router.use(function(req, res, next) {
+router.use( function(req, res, next) {
 	console.log(req.url);
 	if(!req.user) {
 		res.render('signin',{error : req.flash('error'), success: req.flash('success')});
@@ -86,65 +31,100 @@ router.use(function(req, res, next) {
   		next();
 });
 
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {  
+	    if (file.fieldname == 'attach')     
+	        cb(null, 'public/uploads/') 
+	},
+  	filename: function (req, file, cb) {        
+    	if(file.mimetype=="image/jpeg"){             
+       		cb(null, req.user.nick + '.jpg'); 
+    	}
+    	else if(file.mimetype=="image/png"){             
+        	cb(null, req.user.nick + '.png');          
+    	}  
+  	}
+});
+
+var fileFilter = function(req,file,cb){
+  	fileUpload = true;
+  	console.log(file);
+  	console.log('++++');
+  	if (file.mimetype=="image/jpeg") {
+    	cb(null,true);
+  	} else {
+    	fileFilter = true;
+    	cb(null,false);
+  	}
+} 
+
+var uploads = multer({ storage: storage,
+  	fileFilter:fileFilter,
+  	limits:{
+    	fileSize: 5000*5000
+  	} 
+});
+
+var upload = uploads.fields([{ name: 'attach' }]);
+
 router.get('/signin', function(req, res, next) {
 	if(!req.user){
-		//req.flash('error','Please Sign in');
 		res.render('signin',{error : req.flash('error'), success: req.flash('success')});
 	}
     else{
     	res.redirect('/users/index');
-    	//res.render('users/index',{ username: req.user.nick});
     }
 });
 
 router.get('/index',function(req,res,next){
 	videos.aggregate([
-   	     {$sort: {_id: -1}},
-   	     {$limit: 10}
+   	     {
+   	     	$sort: {_id: -1}
+   	     },
+   	     {
+   	     	$limit: 10
+   	     }
    	]).exec( function(err,vids){
-		    if (err){
-		    	//console.log("1");
-            	req.flash('error',err);
-            }
-            else if(vids.length == 0) {
-            	//console.log("2");
-            	console.log(vids);
-            	req.flash('error', 'sorry required video does not exist.');
-            	//res.redirect('settings');
-            }
-            else
-            {  
-              videos.find({ $where: function () { return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  }  }
-                ).sort({ views: -1}).limit(10).exec( function(err,vides){
-                   if (err){
-                             req.flash('error',err);
-                           }
-                  else if(vids.length == 0) {
-                     console.log(vides);
-                     req.flash('error', 'sorry required video does not exist.');
-                       }
-                  else{
-                         console.log(vides);
-        	             if(req.user)
-        	               	res.render('users/index',{videos:vids, videoss:vides, userdata: req.user});
-        	             else
-        		          res.render('index', {videos: vids, videoss:vides});
-                    }
-                });
-            }
-
+	    if (err){
+        	req.flash('error',err);
+        	res.redirect('/message');
+        }
+        else if(vids.length == 0) {
+        	//console.log(vids);
+        	req.flash('error', '0 videos exist');
+        	res.redirect('/message');
+        }
+        else
+        {  
+          	videos.find({ 
+          		$where: function () { 
+          			return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  
+          		}  
+          	}).sort({ 
+          		views: -1
+          	}).limit(10).exec( function(err,vides){
+               	if (err){
+                    req.flash('error',err);
+                }
+              	else if(vids.length == 0) {
+                 	console.log(vides);
+                 	req.flash('error', 'sorry required video does not exist.');
+                }
+              	else{
+                    console.log(vides);
+    	            if(req.user)
+    	               res.render('users/index',{videos:vids, videoss:vides, userdata: req.user});
+    	            else
+    		          res.render('index', {videos: vids, videoss:vides});
+                }
+            });
+        }
 	});
 });
 
 //password forget and reset
 router.get('/forgot',function(req, res, next){
 	res.render('users/forgot');
-});
-router.get('/about',function(req, res, next){
-     if(req.user)
-          res.render('users/about',{userdata: req.user});
-      else
-           res.render('about');
 });
 
 router.get('/settings', function( req, res, next){
@@ -155,22 +135,14 @@ router.get('/settings', function( req, res, next){
 });
 
 router.get('/profile', function( req, res, next){
-	console.log(req.user.nick+'.jpg');
-	//console.log('---------------');
-	//console.log(req.user);
-	//console.log(fs.existsSync(__dirname+"/index.js"));
-	//console.log(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".jpg")));
+	//console.log(req.user.nick+'.jpg');
 	if(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".jpg"))){
 		var str = req.user.nick+".jpg";
 	   res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st:str});
 	}
-	/*else if(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".png"))){
-		var str = req.user.nick+".png";
-	   res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st:str});
-	}*/
 	else{
 		var str = "circle.jpg";
-	 res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st: str });
+	 	res.render('users/profile', { error : req.flash('error'), success: req.flash('success'), userdata: req.user , st: str });
 	}
 });
 
@@ -178,31 +150,31 @@ router.post('/profile',function(req, res, next) {
 	upload(req, res, function (err) {
 		var file = false;
 	    if (err) {
-	      console.log(err.message);
-	      console.log('+++++++++++');
-	      req.flash('error',err.message.toString());
-	      res.render('users/profile',{userdata: req.user ,st:req.user.nick+".jpg"});
+	      	console.log(err.message);
+	      	//console.log('+++++++++++');
+	      	req.flash('error',err.message.toString());
+	      	res.render('users/profile',{userdata: req.user ,st:req.user.nick+".jpg"});
 	    }
 	    else if(fileFilter==true){
-	    	console.log('++++---');
+	    	//console.log('++++---');
 	    	fileFilter = false;
 	    	req.flash('error','Error Uploading Document. Invalid File-Type.');
 	      	res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
 	    }else if(fileUpload==true && req.files.attach==null){
-	    	console.log('++++****');
+	    	//console.log('++++****');
 	    	fileUpload = false;
 	    	req.flash('error','Error Uploading Document. Max File-Size Exceeded.');
 	      	res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
 	      }
 	    else if(req.body.message == '' && req.files.attach==null){
-	    	console.log('++++/////');
+	    	//console.log('++++/////');
 	    	req.flash('error','Please Enter a Message.');
 	      	res.render('users/profile',{userdata: req.user,st:req.user.nick+".jpg"});
 	      }
 	    else{
 			//console.log(req.body);
 			//console.log(req.files);
-			console.log('++');
+			//console.log('++');
 			var message = req.body.message;
 			var originalname,name;
 			if (req.files.attach!=null) {
@@ -231,59 +203,59 @@ router.post('/profile',function(req, res, next) {
 
 //update password to synchronise with dchub
 router.post('/passupdate', function(req, res, next) {
-	//console.log(req);
-	//res.send(req.body);
-	//conso/le.log(req.body);
-	//console.log("---------------")
 	var username = req.user.nick;
 	var password = req.body.password;
-	users.findOne( { 'nick' : username},function(err, user) {
+	users.findOne( { 
+		'nick' : username
+	},function(err, user) {
 		console.log(moment());
-            if (err) {
-            	req.flash('error',err);
-            	res.redirect('settings');
-            }
-            else if(!user) {
-            	req.flash('error', 'sorry you have not registered.');
-            	res.redirect('settings');
-            }
-            else {
-            	var url="http://172.16.86.222:13000/login?nick="+username+"&password="+password+"&secret=qwerty";
-				request.get(url,function(err, httpres, body){
-					body = JSON.parse(body);
-					//console.log(body);
-					if(err){
-						console.log(err);
-						req.flash('error', 'some internal error has occured');
-            			res.redirect('settings');
-					}
-					else{
-						if(body.error && body.error.length>0){
-							req.flash('error', 'Incorrect Password. Please try again.' );
-            				res.redirect('settings');
+        if (err) {
+        	req.flash('error',err);
+        	res.redirect('settings');
+        }
+        else if(!user) {
+        	req.flash('error', 'sorry you have not registered.');
+        	res.redirect('settings');
+        }
+        else {
+        	var url="http://172.16.86.222:13000/login?nick="+username+"&password="+password+"&secret=qwerty";
+			request.get(url,function(err, httpres, body){
+				body = JSON.parse(body);
+				//console.log(body);
+				if(err){
+					console.log(err);
+					req.flash('error', 'some internal error has occured');
+        			res.redirect('settings');
+				}
+				else{
+					if(body.error && body.error.length>0){
+						req.flash('error', 'Incorrect Password. Please try again.' );
+        				res.redirect('settings');
 						//res.render('signin',{message : body.error});
-						}	
-						else{
-							users.update( {'nick': username},{
-								$set: {'password': createHash(password)} },function(err, doc){
-								if(err){
-									console.log(err);
-									req.flash('error', 'update failure due to some internal error' );
-            						res.redirect('settings');
-								}
-								else{
-									req.flash('success', 'updation successful' );
-            						res.redirect('settings');
-								}
-							});
-						}
-
+					}	
+					else{
+						users.update( {
+							'nick': username
+						},{
+							$set: {
+								'password': createHash(password)
+							} 
+						},function(err, doc){
+							if(err){
+								console.log(err);
+								req.flash('error', 'update failure due to some internal error' );
+        						res.redirect('settings');
+							}
+							else{
+								req.flash('success', 'updation successful' );
+        						res.redirect('settings');
+							}
+						});
 					}
-				});
-            }
-
+				}
+			});
+        }
 	});
-
 });
 
 router.post('/editprofile', function(req, res, next) {
@@ -294,8 +266,14 @@ router.post('/editprofile', function(req, res, next) {
 		fullname = req.body.fullname;
 	if(req.body.ip)
 		ip = req.body.ip;
-	users.update( {'nick': username},{
-		$set: {'full_name': fullname, 'ip': ip} },function(err, doc){
+	users.update( {
+		'nick': username
+	},{
+		$set: {
+			'full_name': fullname, 
+			'ip': ip
+		} 
+	},function(err, doc){
 		if(err){
 			console.log(err);
 			req.flash('error', 'update failure due to some internal error' );
@@ -308,7 +286,7 @@ router.post('/editprofile', function(req, res, next) {
 	});
 });
 
-router.post('/search',function(req,res){
+/*router.post('/search',function(req,res){
 	//console.log("++++++++++++++++++");
 	//console.log(req.body);
 	var title =req.body.title;
@@ -365,7 +343,7 @@ router.post('/delvid', function(req, res, next) {
 		}
 	});
 
-});
+});*/
 
 router.post('/refresh', function(req, res, next) {
 	var ip = req.user.ip;
@@ -390,7 +368,7 @@ router.post('/refresh', function(req, res, next) {
 	});
 });
 
-router.post('/addvid', function(req, res, next) {
+/*router.post('/addvid', function(req, res, next) {
 	var username = req.body.nick;
   	var password = req.body.password;
 	users.findOne( { 'nick' : username},function(err, user) {
@@ -425,7 +403,7 @@ router.post('/addvid', function(req, res, next) {
 			});
 	    }
 	  });
-});
+});*/
 
 
 var updateeach = function(data, user,array, req, res){
@@ -501,6 +479,7 @@ var updateeach = function(data, user,array, req, res){
 		//console.log('------------');
 	});
 }
+
 function userValidate(req,res,next){
 	//console.log(req.user);
 	users.findOne(req.user,function(err, user) {
@@ -513,6 +492,7 @@ function userValidate(req,res,next){
 		}
 	});
 }
+
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }

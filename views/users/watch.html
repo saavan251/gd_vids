@@ -3,6 +3,13 @@
  {% parent %}
     <link rel="stylesheet" type="text/css" href="/stylesheets/like.css">
     <link rel="stylesheet" type="text/css" href="/css/extra.css">
+    <style>
+      .disabled {
+          pointer-events: none;
+          cursor: default;
+          opacity: 0.6;
+      }
+    </style>
  {% endblock%} 
 
 {% block contents %}
@@ -28,8 +35,8 @@
                         </button>
                       </a>
                     </span>
-                    <span class="" style="display-inline;margin-left:2%;margin-top:2%;"  >
-                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/0" >
+                    <span class="" style="display-inline;margin-left:2%;margin-top:2%;">
+                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/0" class="disabled">
                         <button class="btn btn-sm btn-primary" type="submit" id="upvote" disabled>
                           <i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{videodata.downvotes}}</span>
                         </button>
@@ -37,7 +44,7 @@
                     </span>
                     {% elseif dn %}
                     <span class="" style="display-inline;margin-left:4%;margin-top:2%;" >
-                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/0" >
+                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/0" class="disabled" >
                         <button class="btn btn-sm btn-primary" type="submit" id="upvote" disabled>
                           <i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{videodata.upvotes}}</span>
                         </button>

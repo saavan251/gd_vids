@@ -19,16 +19,18 @@ var videos = mongoose.model('videos');
 router.post('/addvid', function(req, res, next) {
 	var username = req.body.nick;
   	var password = req.body.password;
-	users.findOne( { 'nick' : username},function(err, user) {
+	users.findOne( { 
+		'nick' : username
+	},function(err, user) {
 	    //console.log(moment());
 	    if (err) {
-	      res.send('attendance error');
+	      	res.send('attendance error');
 	    }
 	    else if(!user) {
-	      res.send('sorry you are not registered');
+	      	res.send('sorry you are not registered');
 	    }
 	    else if (!isValidPassword(user, password)){
-	      res.send('sorry incorrect password');
+	      	res.send('sorry incorrect password');
 	    }
 	    else{
 	      	var ip = user.ip;
@@ -36,7 +38,7 @@ router.post('/addvid', function(req, res, next) {
 			var url="http://"+ip+":"+port.toString()+"/addlist.html";
 			console.log(url);
 			request.get(url, function(err, httpres, body){
-				console.log(body);
+				//console.log(body);
 				var array = body.split('"""');
 				var data = array[1].split('$$$');
 				if(err){
@@ -74,7 +76,7 @@ router.post('/delvid', function(req, res, next) {
 			var url="http://"+ip+":"+port.toString()+"/dellist.html";
 			console.log(url);
 			request.get(url, function(err, httpres, body){
-				console.log(body);
+				//console.log(body);
 				var array = body.split('"""');
 				var data = array[1].split('$$$');
 				if(err){
@@ -86,20 +88,22 @@ router.post('/delvid', function(req, res, next) {
 					for (i=0; i< (data.length-1); i++){
 						deleteeach(data[i], user, array, req, res);
 					}
-						res.send('successfully removed videos from your share');
+					res.send('successfully removed videos from your share');
 				}
 			});
 	    }
-	  });
+	});
 });
 
 var deleteeach = function(data, user,array, req, res){
 	var elem=data;
 	var userid = user._id;
-	videos.findOne({'tth': elem}).populate('users._userid').exec( function(err, video){
-		console.log(video);
-		console.log(elem);
-		console.log('+++++++++++');
+	videos.findOne({
+		'tth': elem
+	}).populate('users._userid').exec( function(err, video){
+		//console.log(video);
+		//console.log(elem);
+		//console.log('+++++++++++');
 		if(err){
 			console.log(err);
 			return false;
@@ -111,7 +115,9 @@ var deleteeach = function(data, user,array, req, res){
 			return true;			
 		}
 		else if(video.users.length == 1 && JSON.stringify(video.users[0]._userid._id)== JSON.stringify(userid) ){
-			videos.remove({ 'tth': elem }, function(err){
+			videos.remove({ 
+				'tth': elem 
+			}, function(err){
 				if(err){
 					console.log(err);
 					return false;
@@ -122,9 +128,15 @@ var deleteeach = function(data, user,array, req, res){
 		}
 		else if(video.users.length > 1){
 			var oid= mongoose.Types.ObjectId(userid);
-			videos.update({'tth' : elem},{
-				$pull : {"users" :{'_userid': oid}}}
-			).exec( function(err, video){
+			videos.update({
+				'tth' : elem
+			},{
+				$pull : {
+					"users" :{
+						'_userid': oid
+					}
+				}
+			}).exec( function(err, video){
 				if(err){
 					console.log(err);
 					return false;
@@ -142,17 +154,20 @@ var updateeach = function(data, user,array, req, res){
 	//console.log(elem[0]);
 	//console.log(elem[1]);
 	var userid = user._id;
-	videos.findOne({'tth': elem[1]}).populate('users._userid').exec( function(err, video){
-		console.log(video);
-		console.log(elem[1]);
-		console.log('+++++++++++');
+	videos.findOne({
+		'tth': elem[1]
+	}).populate('users._userid').exec( function(err, video){
+		//console.log(video);
+		//console.log(elem[1]);
+		//console.log('+++++++++++');
 		if(err){
 			console.log(err);
 			req.flash('error', 'some internal error in refreshing file');
 			res.redirect('settings');
 		}
 		else if(!video){
-			console.log("$$$$$$$$$$$$$$$$$");var ct = elem[0].lastIndexOf('/')+1;
+			//console.log("$$$$$$$$$$$$$$$$$");
+			var ct = elem[0].lastIndexOf('/')+1;
 			var video = new videos({
 				tth: elem[1],
 				format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length),
@@ -162,35 +177,41 @@ var updateeach = function(data, user,array, req, res){
 					url: elem[0],
 					version: parseInt(array[0])
 				}]
-			}) ;
+			});
 			video.save(function(err, video){
 				if(err){
 					console.log(err);
-					req.flash('error', 'some internal error in adding new video '+ elem[1]);
-					res.redirect('settings');
+					//req.flash('error', 'some internal error in adding new video '+ elem[1]);
+					res.send('error in updating videos');
 				}
 				console.log('updated'+ elem[0]);
 			});
 		}
 		else{
 			var flag=1;
-			console.log('6666666666');
+			//console.log('6666666666');
 			for(var j=0; j<video.users.length; j++){
 				if (JSON.stringify(video.users[j]._userid._id)== JSON.stringify(userid) ) {
-					
-					flag=0;  var ct = elem[0].lastIndexOf('/')+1; 
-	                videos.update({"_id": video._id, "users._userid": userid}, 
-					{$set: {"users.$.title": elem[0].substring(ct,elem[0].length -4),
-					"users.$.version": parseInt(array[0]),
-					"users.$.url": elem[0]	
-				}}).exec();
+					flag=0;  
+					var ct = elem[0].lastIndexOf('/')+1; 
+	                videos.update({
+	                	"_id": video._id, 
+	                	"users._userid": userid
+	                }, 
+					{
+						$set: {
+							"users.$.title": elem[0].substring(ct,elem[0].length -4),
+							"users.$.version": parseInt(array[0]),
+							"users.$.url": elem[0]	
+						}
+					}).exec();
 	            	req.flash('success', 'successful');
 	            }
 			}
 			if(flag == 1){
 				var ct = elem[0].lastIndexOf('/')+1;
-			    videos.update(
-				{'_id' : video._id},{
+			    videos.update({
+			    	'_id' : video._id},{
 		            $push:{ 
 		                'users': {
 		                    _userid: userid,
@@ -208,7 +229,6 @@ var updateeach = function(data, user,array, req, res){
 	            });
 			}
 		}
-		//console.log('------------');
 	});
 }
 
@@ -224,4 +244,5 @@ function random (low, high) {
 var isValidPassword = function(user, password){
   return bCrypt.compareSync(password, user.password);
 }
+
 module.exports = router;
