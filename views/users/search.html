@@ -2,7 +2,7 @@
 {% block customCSS %}
  {% parent %}
     <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
-      <link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/>
+      <!--link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/-->
       <style>
         .heading{
           display: flex;
@@ -14,19 +14,32 @@
           color: red;
           margin: 5% 0% 1% auto;
         }
+        .resultno{
+          color: fuchsia;
+        }
       </style>
  {% endblock%} 
 
 
 {% block contents %}
   {% parent %}
-  <div class="search_results">
+  <span >
+    <h2 class="col-md-offset-3 col-sm-offset-2 col-ls-offset-4 col-xs-offset-1"> Search results for {{qry.title}}</h2>
+  </span>
+  <span >
+    <h5 class="resultno col-md-offset-4 col-sm-offset-2 col-ls-offset-6 col-xs-offset-1"> {{vlen}} matches found</h5>
+  </span>
+  <div class="row col-md-offset-1 col-md-10">
+      <hr/>
+  </div>
+  <div class="clearfix search_results">
     {% for video in videos %}
-    <a href="/videos/watch/{{ video._id.toString() }}">
-      <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
+    
+    <div class= "col-md-offset-1 col-sm-offset-1 col-ls-offset-1 col-ls-10 col-sm-10 col-md-10 ">
+      <a href="/videos/watch/{{ video._id.toString() }}">
         <div class="panel">
           <div class="row">
-            <div class="col-sm-4 col-md-2">
+            <div class="col-sm-4 col-md-2 col-xs-4 col-ls-4">
               <span class="thumbnail" style="margin: 2% auto;">
                 <img src="images/img_avatar2.jpg" alt="#">
               </span>
@@ -41,13 +54,13 @@
               </span>
             </div>
           </div>
-        </div>
+        </a>
       </div>
-    </a>
-  </div>
-    {% endfor %}
+    </div>
     
-      <center>
+    {% endfor %}
+  </div>
+    <div class="col-md-offset-4 col-ls-offset-4 col-md-12 col-ls-12">
     <nav aria-label="Page navigation">
   <ul class="pagination">
     <li>
@@ -66,10 +79,7 @@
       </a>
     </li>
   </ul>
-</nav></center>
-
-
- </div>
-
+</nav>
+</div>
 
 {% endblock%}

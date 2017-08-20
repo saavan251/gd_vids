@@ -1,6 +1,6 @@
 {% extends 'usernav.html' %}
 {% block customCSS %}
- {% parent %}
+ {%   parent %}
     <link rel="stylesheet" type="text/css" href="/stylesheets/like.css">
     <link rel="stylesheet" type="text/css" href="/css/extra.css">
     <style>
@@ -9,19 +9,32 @@
           cursor: default;
           opacity: 0.6;
       }
+      .error-template {padding:20% 20% 20% 20%;text-align: center; color:#ff0033;}
     </style>
  {% endblock%} 
 
 {% block contents %}
  {% parent %}
    <!--<div class="col-ls-offset-4 col-ls-8 col-md-offset-4 col-md-8 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10">-->
-     <div class="container col-lg-offset-1 col-lg-10 col-md-offset-2 col-md-10 col-sm-offset-1 col-sm-10 col-xs-offset-1 col-xs-10">
+     <div class="container col-lg-11 col-md-11 col-sm-11 col-xs-11" id="main_area" style="margin-left:5%;">
        <div class="row" >
            <div class="col-md-8">
               <!--iframe width=100% height=500 style="margin-top:5%; margin-right:5%" src="{{vidurl}}" frameborder="0" allowfullscreen></iframe-->
-              <video height="100%" width="100%" style="margin-top:5%; margin-right:5%" controls frameborder="0" autoplay="true">
-                <source src="{{vidurl}}" type="video/mp4" />
+              <video height="100%" width="100%" style="margin-top:5%; margin-right:5%" id="v1" controls frameborder="0" autoplay="true">
+                <source src="{{vidurl}}" type="video/mp4" onerror="notavail()"/>
               </video>
+              <div class="container" id="vid" style="display:none;">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10">
+                        <div class="error-template">
+                            <h1>
+                                Oops!</h1>
+                            <h2>
+                                error showing video- maybe user went offline or the video is not supported :( </h2>
+                        </div>
+                    </div>
+                </div>
+              </div>
               <ul class="list-group" style="margin-top:2%;">
                 <li class="list-group-item"><span class="videotitle">{{vusrdata.title}}</span>
                   <span class="label-ls label-primary col-md-offset-1 col-sm-offset-1 " style="margin-top:2%;">
@@ -29,48 +42,48 @@
                     
                     {% if up %}    
                     <span class="" style="display-inline;margin-left:4%;margin-top:2%;">
-                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/1" >
-                        <button class="btn btn-sm btn-success" type="submit" id="upvote" >
+                      <!--a  href="/videos/upvoted/{{videodata._id.toString()}}/1" -->
+                        <button class="btn btn-sm btn-success" type="submit" id="upvote1tha" onclick="updata(1)">
                           upvoted
                         </button>
-                      </a>
+                      <!--/a-->
                     </span>
                     <span class="" style="display-inline;margin-left:2%;margin-top:2%;">
-                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/0" class="disabled">
-                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" disabled>
+                      <!--a  href="/videos/downvoted/{{videodata._id.toString()}}/0" class="disabled"-->
+                        <button class="btn btn-sm btn-primary disabled" type="submit" id="downvotedis" onclick="downdata(0)">
                           <i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{videodata.downvotes}}</span>
                         </button>
-                      </a>
+                      <!--/a-->
                     </span>
                     {% elseif dn %}
                     <span class="" style="display-inline;margin-left:4%;margin-top:2%;" >
-                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/0" class="disabled" >
-                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" disabled>
+                      <!--a  href="/videos/upvoted/{{videodata._id.toString()}}/0" class="disabled" -->
+                        <button class="btn btn-sm btn-primary disabled" type="submit" id="upvotedis" onclick="updata(0)">
                           <i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{videodata.upvotes}}</span>
                         </button>
-                      </a>
+                      <!--/a-->
                     </span>
                     <span class="" style="display-inline;margin-left:2%;margin-top:2%;">
-                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/1" >
-                        <button class="btn btn-sm btn-warning" type="submit" id="upvote" >
+                      <!--a  href="/videos/downvoted/{{videodata._id.toString()}}/1" -->
+                        <button class="btn btn-sm btn-warning" type="submit" id="downvote1tha" onclick="downdata(1)">
                           downvoted
                         </button>
-                      </a>
+                      <!--/a-->
                     </span>
                     {% else %}
                     <span class="" style="display-inline;margin-left:4%;margin-top:2%;">
-                      <a  href="/videos/upvoted/{{videodata._id.toString()}}/0" >
-                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" >
+                      <!--a  href="/videos/upvoted/{{videodata._id.toString()}}" -->
+                        <button class="btn btn-sm btn-primary" id="upvote0" onclick="updata(0)" >
                           <i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">{{videodata.upvotes}}</span>
                         </button>
-                      </a>
+                      <!--/a-->
                     </span>
                     <span class="" style="display-inline;margin-left:2%;margin-top:2%;">
-                      <a  href="/videos/downvoted/{{videodata._id.toString()}}/0" >
-                        <button class="btn btn-sm btn-primary" type="submit" id="upvote" >
+                      <!--a  href="/videos/downvoted/{{videodata._id.toString()}}" -->
+                        <button class="btn btn-sm btn-primary" type="submit" id="downvote0" onclick = "downdata(0)">
                           <i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">{{videodata.downvotes}}</span>
                         </button>
-                      </a>
+                      <!--/a-->
                     </span>
                     {% endif %}
                     <!--span>
@@ -93,43 +106,175 @@
             </div>
              <b>  
           </div-->
-          <div class="col-md-4" >
+          <div class="col-md-4 panel" >
             <h3 style="padding-bottom:3%;padding-left:13%">TOP VIEWED THIS WEEK</h3>
-            {% for video in videoss %}
-              <a href="/videos/watch/{{ video._id.toString() }}">
-                <div class= "col-sm-12 col-md-12 ">
-                  <div class="panel">
-                    <div class="row">
-                      <div class="col-sm-4 col-md-4">
-                        <span class="thumbnail" style="margin-top:4%;">
-                          <img src="../../images/img_avatar2.jpg" alt="#">
-                        </span>
-                      </div>
-                      <div class="col-sm-8 col-md-8" >
-                        <span style:"margin-top:0% ;">
-                          <h4> {{ video.users[0].title }}</h4>
-                        </span>
-                        Shared By:&nbsp
-                        <span style="color:yellow;">
-                          {{video.users.length}} users
-                        </span>
-                      </div>
+              <div class="table-responsive"> 
+                {% for video in videoss %}
+                  <a href="/videos/watch/{{ video._id.toString() }}">
+                    <div class= "col-sm-12 col-md-12 ">
+                      <!--div class="panel"-->
+                        <div class="row">
+                          <div class="col-sm-4 col-md-4">
+                            <span class="thumbnail" style="margin-top:4%;">
+                              <img src="../../images/img_avatar2.jpg" alt="#">
+                            </span>
+                          </div>
+                          <div class="col-sm-7 col-md-7" >
+                            <span style:"margin-top:0% ;">
+                              <h4> {{ video.users[0].title }}</h4>
+                            </span>
+                            Shared By:&nbsp
+                            <span style="color:yellow;">
+                              {{video.users.length}} users
+                            </span>
+                            <span class="col-md-offset-1 col-sm-offset-1 col-ls-offset-1" style="color:#E44424;">
+                              {{video.views}} views
+                            </span>
+                          </div>
+                        </div>
+                      <!--/div-->
                     </div>
-                  </div>
-                </div>
-              </a>
-              {% endfor %}
+                  </a>
+                  {% endfor %}
+              </div>
           </div>
 
        </div>         
   </div>
   
- 
+  <script src="/js/video.js"></script>
+  <script type="text/javascript">
+  console.log("this scipt is running.");
+  function notavail(){
+    $('#v1').hide();
+    $('#vid').show();
+    //$('#vid').html("error showing video- maybe user went offline or the video is not supported :(");
+    //document.getElementById('vid').text="error showing video- maybe user went offline or the video is not supported :(";
+  }
+  function updata(tog){
+      if(tog == 0){
+        $.ajax({
+          type: 'GET',
+          url: "/videos/upvoted/{{videodata._id.toString()}}/"+tog,
+          success: function(res) {
+            console.log("Res",res);
+            //$("#upvote0").append(res);
+            $("#upvote0").text(res);
+            $('#upvote0').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-success');
+            $('#upvote0').attr('onclick', 'updata(1)');
+            $('#upvote0').blur();
+            $("#upvote1tha").text(res);
+            $('#upvote1tha').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-success');
+            $('#upvote1tha').attr('onclick', 'updata(1)');
+            $('#upvote1tha').blur();
+            $('#downvotedis').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-primary disabled');
+            $('#downvote0').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-primary disabled');
+            $("#upvotedis").text(res);
+            $('#upvotedis').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-success');
+            $('#upvotedis').attr('onclick', 'updata(1)');
+            $('#upvotedis').blur();
+            $('#downvote1tha').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-primary disabled');
+          },
+          error: function(err, error){
+            console.log(err,"error");
+          }
+        });
+      }
+      else if(tog == 1){
+        $.ajax({
+          type: 'GET',
+          url: "/videos/upvoted/{{videodata._id.toString()}}/"+tog,
+          success: function(res) {
+            console.log("Res",res);
+            $("#upvote1tha").html('<i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">'+{{videodata.upvotes-1}}+'</span>');
+            $('#upvote1tha').removeClass('btn btn-sm btn-success').addClass('btn btn-sm btn-primary');
+            $('#upvote1tha').attr('onclick', 'updata(0)');
+            $('#upvote1tha').blur();
+            $('#downvotedis').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+            $("#upvote0").html('<i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">'+{{videodata.upvotes}}+'</span>');
+            $('#upvote0').removeClass('btn btn-sm btn-success').addClass('btn btn-sm btn-primary');
+            $('#upvote0').attr('onclick', 'updata(0)');
+            $('#upvote0').blur();
+            $('#downvote0').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+            $("#upvotedis").html('<i class="glyphicon glyphicon-thumbs-up"></i> <span class="badge">'+{{videodata.upvotes}}+'</span>');
+            $('#upvotedis').removeClass('btn btn-sm btn-success').addClass('btn btn-sm btn-primary');
+            $('#upvotedis').attr('onclick', 'updata(0)');
+            $('#upvotedis').blur();
+            $('#downvote1tha').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+            /*$('#downvotedis').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+            $('#downvotedis').attr('onclick', 'downdata(0)');
+            $('#downvotedis').blur();*/
 
-
+          },
+          error: function(err, error){
+            console.log(err,"error");
+          }
+        });
+      }
+    }
+    function downdata(tog){
+      if(tog == 0){
+        $.ajax({
+          type: 'GET',
+          url: "/videos/downvoted/{{videodata._id.toString()}}/"+tog,
+          success: function(res) {
+            console.log("Res",res);
+            //$("#upvote0").append(res);
+            $("#downvote0").text(res);
+            $('#downvote0').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-warning');
+            $('#downvote0').attr('onclick', 'downdata(1)');
+            $('#downvote0').blur();
+            $("#downvotedis").text(res);
+            $('#downvotedis').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-warning');
+            $('#downvotedis').attr('onclick', 'downdata(1)');
+            $('#downvotedis').blur();
+            $('#upvote1tha').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-primary disabled');
+            $("#downvote1tha").text(res);
+            $('#downvote1tha').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-warning');
+            $('#downvote1tha').attr('onclick', 'downdata(1)');
+            $('#downvote1tha').blur();
+            $('#upvote0').removeClass('btn btn-sm btn-primary').addClass('btn btn-sm btn-primary disabled');
+            $('#upvotedis').removeClass('btn btn-sm btn-primary ').addClass('btn btn-sm btn-primary disabled');
+          },
+          error: function(err, error){
+            console.log(err,"error");
+          }
+        });
+      }
+      else if(tog == 1){
+        $.ajax({
+          type: 'GET',
+          url: "/videos/downvoted/{{videodata._id.toString()}}/"+tog,
+          success: function(res) {
+            console.log("Res",res);
+            $("#downvote1tha").html('<i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">'+{{videodata.downvotes-1}}+'</span>');
+            $('#downvote1tha').removeClass('btn btn-sm btn-warning').addClass('btn btn-sm btn-primary');
+            $('#downvote1tha').attr('onclick', 'downdata(0)');
+            $('#downvote1tha').blur();
+            $('#upvotedis').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+            $("#downvotedis").html('<i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">'+{{videodata.downvotes}}+'</span>');
+            $('#downvotedis').removeClass('btn btn-sm btn-warning').addClass('btn btn-sm btn-primary');
+            $('#downvotedis').attr('onclick', 'downdata(0)');
+            $('#downvotedis').blur();
+            $("#downvote0").html('<i class="glyphicon glyphicon-thumbs-down"></i> <span class="badge">'+{{videodata.downvotes}}+'</span>');
+            $('#downvote0').removeClass('btn btn-sm btn-warning').addClass('btn btn-sm btn-primary');
+            $('#downvote0').attr('onclick', 'downdata(0)');
+            $('#downvote0').blur();
+            $('#upvote0').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+            $('#upvote1tha').removeClass('btn btn-sm btn-primary disabled').addClass('btn btn-sm btn-primary');
+          },
+          error: function(err, error){
+            console.log(err,"error");
+          }
+        });
+      }
+    }
+  </script>
  {% endblock%}
 
+{% block customScripts %} 
 
+{%endblock%}
 
 
 

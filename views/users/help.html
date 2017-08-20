@@ -1,0 +1,130 @@
+{% extends 'usernav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
+    <link rel="stylesheet" type="text/css" href="/css/extra.css">
+    <style>
+    .bolden{
+        color: yellow;
+    }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ {% endblock%} 
+
+ {% block contents %}
+ {% parent %}
+ 
+    <div class ="col-md-offset-1 col-md-10">
+        <h1  id ="share"><font size="7.5">Watching Videos</font></h1>
+        <p>
+            <font size="4.5">
+                You can just watch videos without signing in from mobile, tabs, PCs etc. The contents are best viewed with Google Chrome browser. So prefer to use Google Chrome for viewing. Currently few videos are not playing in current version of chrome.Things will get sorted with further updates.
+            </font>
+        </p>
+        <h1 id ="share"><font size="7.5">Sharing Videos</font></h1>
+        <p ><font size="4.5">
+            You can not only just watch videos but also share them for others to view. To share the video you must follow the steps as described below. The steps are similar as if you had to install a software and then perform certain steps...
+            Plz.. use lan wired connection. Router requires extra setup :P [If you want to use router you will have to perform port forwarding for ports 3000 and 8888 and also make your laptop assign static ip in your router control panel. Only one device can share from one router. Also your ip will be the ip you have assigned to your router...]
+            <ul class="list-group">
+                <li class="list-group-item" style="margin-bottom:2%;"><h2>Initial setup</h2>
+                <ol>
+                    <li>
+                        You must have nodejs intalled in your system. You can visit the website <a href="https://nodejs.org/en/download/"> here</a>. You can also follow steps <a href="http://blog.teamtreehouse.com/install-node-js-npm-windows">here </a>
+                    </li>
+                    <li>
+                        After you have installed and checked that node is working fine, you must select a location in you computer where you wish to keep your shared videos. Download the zip from <a href ="http://192.168.118.164:3000/setup.zip" download>here</a>. Unzip the files and place the folder there.
+                    </li>
+                    <li>
+                        <strong class="bolden">
+                            You must keep in mind not to rename or delete any of the files or folders from this folder. If any such thing happens redownload the <a href ="http://192.168.118.164:3000/setup.zip" download>setup</a> files and replace/add the modified/deleted files.
+                        </strong>
+                    <li>
+                        Run the install script named <strong class="bolden">install.bat</strong> by double clicking it. If no error occurs you are ready to share videos.
+                    </li>
+                    <li>
+                        enter your dc nick and password in the file named <strong class="bolden">userdata.txt</strong> in the form "username,password". example- <strong class="bolden">sinha,pass</strong>.
+                    </li>
+                    <li>
+                        Login to gamedrone website and go to settings and change the ip to your ip (router ip incase you are using your router else the ethernet port ip]. Always perform this step if you change your ip.
+                    </li>
+                    <li>
+                        Start your server by using the script <strong class="bolden">open_server.bat</strong>. You always have to start your server before sharing can occur. This is similar to opening ApexDC or DC++, as long as you keep running the server your videos remain shared. As soon as you turn off your server you go offline. To turn off the server you have to run the script <strong class="bolden">close_server.bat</strong>.
+                    </li>
+                </ol></li>
+                <li class="list-group-item" style="margin-bottom:2%;"><h2>Adding videos to share</h2>
+                <ol>
+                    <li>
+                        Copy the videos to the folder named <strong class="bolden">share_these_videos</strong>.
+                    </li>
+                    <li>
+                        If your server is already running you do not need to restart it again
+                    </li>
+                    <li>
+                        Run the script named <strong class="bolden">openserver.bat</strong> by double clicking it. This will start your server. (To close the server run <strong class="bolden">closeserver.bat</strong>). Your server must be running before you can share a video. To test if your server is running- in browser go to the following ip <strong class="bolden">http://{your_ip}:8888/list.html</strong>. This should show server running. If this is not the case then there is some problem in running the server.
+                    </li>
+                    <li>
+                        Run the script named <strong class="bolden">share_my_videos.bat</strong> by double clicking it. This will open a terminal and if no error is found it means that you have successfully shared your videos.
+                    </li>
+                    <li>
+                         In case if the terminal takes very long time (2-3 minutes or so) to finish. Restart the step 2 again by first closing the terminal. If more videos are shared it will take more time. The time is mainly the hashing time that takes in DC.
+                    </li>
+                    <li>
+                        Now you have shared your videos and your videos will be stored in the folder <strong class="bolden">my_shared_videos</strong>. Donot remove the videos from this folder unless you want them to be removed from your share. To do that follow the steps given in <strong class="bolden">Removing videos from share</strong>.
+                    </li>
+                </ol></li>
+                <li class="list-group-item" style="margin-bottom:2%;"><h2>Removing videos from share</h2>
+                <ol>
+                    <li>
+                        To remove videos from your shared list .Copy those videos from the folder named <strong class="bolden">my_shared_videos</strong>   to the folder named <strong class="bolden">remove_from_share</strong>.
+                    </li>
+                    <li>
+                        If your server is already running you do not need to restart it again.
+                    </li>
+                    <li>
+                        Run the script named <strong class="bolden">openserver.bat</strong> by double clicking it. This will start your server. (To close the server run <strong class="bolden">closeserver.bat</strong>). Your server must be running before you can share a video. To test if your server is running- in browser go to the following ip <strong class="bolden">http://{your_ip}:8888/list.html</strong>. This should show server running. If this is not the case then there is some problem in running the server.
+                    </li>
+                    <li>
+                        Run the script named <strong class="bolden">remove_my_videos.bat</strong> . This will open a terminal and if no error is found it means that you have successfully removed videos from your share.
+                    </li>
+                    <li>
+                         In case if the terminal takes very long time to finish. Restart the step 2 again by first closing the terminal.
+                    </li>
+                    <li>
+                        Now you have removed videos from your share. These videos will be stored in the folder <strong class="bolden">unshared_videos</strong>.You can place them anywhere form here or delete it if you wish so.
+                    </li>
+                </ol></li>
+            </ul></font>
+        </p>
+        <h1 id ="share"><font size="7.5">Updating scripts</font></h1>
+        <p><font size="4.5">
+            <ol>
+                <li>
+                    If in case there arise a need to update the scripts.. you just have to Download the zip from <a href ="http://192.168.118.164:3000/update.zip" download> <strong >Updates</strong> </a>. Unzip the files and replace only the files in the folder where you have shared.
+                </li>
+                <li>
+                    Donot perform any change with the folders.
+                </li>
+            </ol></font>
+        </p>
+        </div>
+        <div class="row col-md-offset-1 col-md-10">
+            <hr/>
+        </div>
+        <!--div class="row col-md-offset-1 col-md-10">
+            <hr/>
+        </div-->
+        <div >
+            <h4><div class="col-md-offset-2 col-md-8" style="margin-bottom:2%;"><center>For any help in above process feel free to ping the admins:</center></div></h4>
+            <h3><div class="col-md-offset-2 col-md-8" style="margin-bottom:1%;"><center>Vishal Ashank&nbsp;<a href="https://www.facebook.com/people/Vishal-Ashank/100004431047606"><i class="fa fa-facebook"></i></a></center></div>
+            <div class="col-md-offset-2 col-md-8" style="margin-bottom:1%;"><center>Subham Kumar Sinha&nbsp;<a href="https://www.facebook.com/subhamkumar.sinha.35"><i class="fa fa-facebook"></i></a></center></div>
+            <div class="col-md-offset-2 col-md-8" style="margin-bottom:1%;"><center>Subham Raj Singh&nbsp;<a href="https://www.facebook.com/profile.php?id=100008263450056"><i class="fa fa-facebook"></i></i></a></center></div></h3>
+        </div>
+        <div class="row col-md-offset-1 col-md-10">
+            <hr/>
+        </div>
+        
+    </div>
+    <div class="col-md-1">
+    </div>
+
+{% endblock%}

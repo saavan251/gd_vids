@@ -33,16 +33,14 @@ router.get('/watch/:id', function(req, res, next) {
 	//console.log(req.params.id);
 	//console.log(req.session);
 	var id = req.params.id;
-	videos.update({ 
-		'_id' : id
-	}, {
-		$inc : { 
-			views : 1 
-		}
-	}).exec();
 	videos.findOne( { 
 		'_id' : id
 	}).populate('users._userid').exec( function(err, video){
+		if(err){
+			console.log(err);
+			req.flash('error', 'no such video exists :(');
+			res.redirect('/message');
+		}
 		//console.log(video);
 		var user = selectuser(video.users);
 		//console.log(user);
@@ -76,6 +74,13 @@ router.get('/watch/:id', function(req, res, next) {
 				//console.log(" 7777777");
 				var vidurl="http://"+ip+":"+port.toString()+path;
 				console.log(vidurl);
+				videos.update({ 
+					'_id' : id
+				}, {
+					$inc : { 
+						views : 1 
+					}
+				}).exec();
 				if(req.user){
 					//console.log(typeof id);console.log(id);
 					var oid= mongoose.Types.ObjectId(id);console.log('4232332');
@@ -101,15 +106,17 @@ router.get('/watch/:id', function(req, res, next) {
 							else{
 								dn = false;
 							}
-							//console.log(up);
+							console.log('up '+up+' down '+dn);
 							//console.log(dn);
 							res.render('users/watch', {videoss : vides, up : up, dn :dn, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, userdata: req.user, vusrdata: user,videodata: video});
 						});
 					});	
 				}
 				else
+				{
 					res.render('videos/watch', {videoss : vides, error : req.flash('error'), success: req.flash('success'), vidurl : vidurl, vusrdata: user, videodata: video });
 				//res.send(ip);
+				}
 			});	
 		}
 	});
@@ -192,6 +199,7 @@ router.get('/downvoted/:id/:toggle', function(req, res, next) {
                 	
                 }
         });
+        res.send('downvoted');
 	}
 	else if(toggle == 1){
 		users.update({
@@ -220,8 +228,9 @@ router.get('/downvoted/:id/:toggle', function(req, res, next) {
 	    			}
 	            }
 	        );
+		res.send('downvote removed');
 	}
-	res.redirect('/videos/watch/'+id);
+	//res.redirect('/videos/watch/'+id);
 });
 
 router.get('/upvoted/:id/:toggle', function(req, res, next) {
@@ -258,6 +267,7 @@ router.get('/upvoted/:id/:toggle', function(req, res, next) {
                 //console.log("######");
                 //console.log(result);
         });
+        res.send('upvoted');
 	}
 	else if(toggle == 1){
 		users.update({
@@ -286,8 +296,10 @@ router.get('/upvoted/:id/:toggle', function(req, res, next) {
 	    			}
 	            }
 	        );
+		res.send('upvote removed');
 	}
-	res.redirect('/videos/watch/'+id);
+	//res.redirect('/videos/watch/'+id);
+
 });
 
 /*router.get('/upvoted/:id', function(req, res, next) {

@@ -13,16 +13,10 @@ var paginate = require('express-paginate');
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-    videos.aggregate([
-        { 
-            $sort: { 
-                _id: -1 
-            } 
-        },
-        { 
-            $limit: 10 
-        }
-    ]).exec( function(err,vids) {
+    videos.find({}).populate('users._userid').limit(10).sort(
+        {
+            '_id': -1
+        }).exec( function(err,vids) {
         if (err){
             req.flash('error',err);
             res.redirect('/message');
@@ -124,6 +118,13 @@ router.get('/message', function(req, res){
     }
 });
 
+router.get('/help',function(req,res){
+    if(req.user)
+        res.render('users/help',{userdata: req.user});
+    else
+        res.render('help');
+})
+
 router.get('/search',function(req,res){
     console.log(req.url);
 	//console.log(req.query);
@@ -147,7 +148,7 @@ router.get('/search',function(req,res){
         else{
             var a = [];
             var limiting =10;
-            var plength = videoss.length;
+            var plength = Math.min(videoss.length,70);
             for (var i = 0; i < plength/limiting; i++) {
                 a.push(i);
             }
@@ -173,9 +174,9 @@ router.get('/search',function(req,res){
                     console.log("3aaaaaaaaaa");
                     console.log(vids[vids.length-1].users);
                     if(req.user)
-                        res.render('users/search',{userdata: req.user, a:a, videos:vids, qry: req.query});
+                        res.render('users/search',{vlen: videoss.length, userdata: req.user, a:a, videos:vids, qry: req.query});
                     else
-                        res.render('search', {userdata: req.user, a:a, videos: vids, qry: req.query});
+                        res.render('search', {vlen: videoss.length, userdata: req.user, a:a, videos: vids, qry: req.query});
                 }
             });
         }
@@ -185,7 +186,7 @@ router.get('/search',function(req,res){
 router.get('/latest', function(req, res) {
     var a = [];
     var limiting =10;
-    var plength = 40;
+    var plength = 70;
     for (var i = 0; i < plength/limiting; i++) {
         a.push(i);
     }
@@ -220,15 +221,61 @@ router.get('/latest', function(req, res) {
 
 
 router.get('/sharers', function(req, res) {
-    res.render('error');
+    //res.render('error');
+    //console.log(req.url);
+    //console.log(req.query);
+    //var title =req.query.title;
+    users.find({ 
+        'issharer': true
+    }).exec( function(err,shar){
+        if(err){
+          req.flash('error',err);
+          res.redirect('/message');
+        }
+        else if(shar.length == 0){
+          req.flash('error', 'no sharers currently');
+          res.redirect('/message');
+        }
+        else{
+            var a = [];
+            var limiting =10;
+            var plength = Math.min(shar.length,70);
+            for (var i = 0; i < plength/limiting; i++) {
+                a.push(i);
+            }
+            if(!req.query.page){
+                page=0;
+            }
+            else
+                page= req.query.page;
+            var skipping = page*limiting;
+            users.find({
+                'issharer': true
+            }).skip(skipping).limit(limiting).exec( function(err,sharers){
+                if (err){
+                    req.flash('error',err);
+                    res.redirect('/message');
+                }
+                else {
+                    console.log("3aaaaaaaaaa");
+                    //console.log(vids[vids.length-1].users);
+                    if(req.user)
+                        res.render('users/sharers',{userdata: req.user, a:a, sharers:sharers, qry: req.query});
+                    else
+                        res.render('sharers', {userdata: req.user, a:a, sharers: sharers, qry: req.query});
+                }
+            });
+        }
+    });
+
 });
 
 router.get('/about',function(req, res, next){
-    res.render('error');
-    /*if(req.user)
+    //res.render('error');
+    if(req.user)
         res.render('users/about',{userdata: req.user});
     else
-        res.render('about');*/
+        res.render('about');
 });
 
 var createHash = function(password){

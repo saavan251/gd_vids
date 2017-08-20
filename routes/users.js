@@ -77,14 +77,10 @@ router.get('/signin', function(req, res, next) {
 });
 
 router.get('/index',function(req,res,next){
-	videos.aggregate([
-   	     {
-   	     	$sort: {_id: -1}
-   	     },
-   	     {
-   	     	$limit: 10
-   	     }
-   	]).exec( function(err,vids){
+	videos.find({}).populate('users._userid').limit(10).sort(
+        {
+            '_id': -1
+        }).exec( function(err,vids){
 	    if (err){
         	req.flash('error',err);
         	res.redirect('/message');
@@ -107,11 +103,11 @@ router.get('/index',function(req,res,next){
                     req.flash('error',err);
                 }
               	else if(vids.length == 0) {
-                 	console.log(vides);
+                 	//console.log(vides);
                  	req.flash('error', 'sorry required video does not exist.');
                 }
               	else{
-                    console.log(vides);
+                    //console.log(vides);
     	            if(req.user)
     	               res.render('users/index',{videos:vids, videoss:vides, userdata: req.user});
     	            else
@@ -271,7 +267,35 @@ router.post('/editprofile', function(req, res, next) {
 	},{
 		$set: {
 			'full_name': fullname, 
-			'ip': ip
+			'ip': ip,
+			'issharer': true
+		} 
+	},function(err, doc){
+		if(err){
+			console.log(err);
+			req.flash('error', 'update failure due to some internal error' );
+			res.redirect('settings');
+		}
+		else{
+			req.flash('success', 'updation successful' );
+			res.redirect('settings');
+		}
+	});
+});
+
+router.post('/stopsharing', function(req, res, next) {
+	var username = req.user.nick;
+	/*var fullname = req.user.full_name;
+	var ip = req.user.ip;
+	if(req.body.fullname.length>0)
+		fullname = req.body.fullname;
+	if(req.body.ip)
+		ip = req.body.ip;*/
+	users.update( {
+		'nick': username
+	},{
+		$set: {
+			'issharer': false
 		} 
 	},function(err, doc){
 		if(err){

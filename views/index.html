@@ -9,13 +9,15 @@
  {% parent %}
     <div class="jumbotron">
      <div class="container text-center">
-       <h1>Welcome to Gamedrone</h1>
+       <h1>Welcome to Gamedrone Videos&nbsp;<sup>&beta;</sup></h1>
        <p>You can watch your favourite  videos, movies and tv series without downloading from  DC.
        </p>
       </div>                 
     </div>
-
-
+    <div class="well col-md-offset-1 col-md-10">
+    <center><h4 style="color:orange;">This website is best viewed in Google Chrome. Some videos may not play in your browser currently, don't panic this is due to some update issue of google chrome. After few updates of google chrome this will start working. !!!
+    </h4></center>
+  </div>
   <div class="container col-md-12 col-sm-12 col-ls-12 col-xs-12">
     <div class="col-sm-12 col-md-6 col-xs-12">
       <div class="panel panel-default" >
@@ -24,13 +26,17 @@
           <div class="table-responsive">          
             {% for video in videos %}
                <a href="/videos/watch/{{ video._id.toString() }}">
-                 <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-10 ">
-                    <div class="row">
+                 <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-11 ">
+                    <div class="row" style="margin-bottom: 2%;">
                         <span class="thumbnail col-sm-2 col-md-2" style="margin: auto;">
                           <img src="/images/img_avatar2.jpg" alt="#">
                         </span>
-                        <span class="container col-sm-6 col-md-9" style="margin: auto;padding: auto;">
-                          <h4 style="margin: 2% auto"> {{ video.users[0].title }}</h4>
+                        <span class="container col-sm-10 col-md-10">
+                          <h4 style="padding-top: 0%;margin-top:0%; margin-bottom:1%"> {{ video.users[0].title }}</h4>
+                          Shared By:&nbsp;
+                          <span  style="color:yellow;">
+                            {{video.users[video.users.length-1]._userid.nick}}
+                          </span>
                         </span>
                     </div>
                   </div>
@@ -47,13 +53,20 @@
             <div class="table-responsive">          
               {% for video in videoss %}
                  <a href="/videos/watch/{{ video._id.toString() }}">
-                   <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-10 ">
-                      <div class="row">
+                   <div class= "col-md-offset-1 col-sm-offset-1 col-sm-11 col-md-11 ">
+                      <div class="row" style="margin-bottom: 2%;">
                           <span class="thumbnail col-sm-2 col-md-2" style="margin: auto;">
                             <img src="/images/img_avatar2.jpg" alt="#">
                           </span>
-                          <span class="container col-sm-6 col-md-9" style="margin: auto;padding: auto;">
-                            <h4 style="margin: 2% auto"> {{ video.users[0].title }}</h4>
+                          <span class="container col-sm-10 col-md-10" >
+                            <h4 style="padding-top: 0%;margin-top:0%; margin-bottom:1%;"> {{ video.users[0].title }}</h4>
+                            Shared By:&nbsp;
+                            <span style="color:yellow;">
+                              {{video.users.length}} users
+                            </span>
+                            <span class="col-md-offset-1 col-sm-offset-1 col-ls-offset-1" style="color:#E44424;">
+                              {{video.views}} views
+                            </span> 
                           </span>
                       </div>
                     </div>

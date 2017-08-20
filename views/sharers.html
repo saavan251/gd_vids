@@ -1,0 +1,75 @@
+{% extends '../views/nav.html' %}
+{% block customCSS %}
+ {% parent %}
+    <!--link rel="stylesheet" type="text/css" href="/css/signin.css"--> 
+      <!--link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/-->
+      <style>
+        .heading{
+          display: flex;
+          content: space-between;
+          margin: 2% auto;
+          padding: 0% 5% 2% 5%;
+        }
+        .message{
+          color: red;
+          margin: 5% 0% 1% auto;
+        }
+      </style>
+ {% endblock%} 
+
+
+{% block contents %}
+  {% parent %}
+  <span >
+    <h2 class="col-md-offset-4"> Sharers</h2>
+  </span>
+  <div class="row col-md-offset-1 col-md-10">
+      <hr/>
+  </div>
+  <div class="search_results">
+    {% for sharer in sharers %}
+    <!--a href="/videos/watch/{{ video._id.toString() }}"-->
+      <div class= "col-md-offset-2 col-sm-offset-1 col-sm-11 col-md-7 ">
+        <div class="panel">
+          <div class="row">
+            <div >
+              <span style="margin-top:10% auto;">
+                <h4 class="col-sm-3 col-md-3"> {{ sharer.nick }}</h4>
+              </span><span style:"padding-top:25% auto;">
+              Last Seen:
+              <span style="color:yellow;">
+                {{sharer.lastseen | date('Y-m-d')}}
+              </span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!--/a-->
+    {% endfor %}
+  </div>
+  <div class="col-md-offset-4 col-ls-offset-4 col-md-12 col-ls-12">
+    <nav aria-label="Page navigation">
+  <ul class="pagination">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% for i in a %}
+    <li>
+     <a href="/latest?page={{i}}">{{i}}</a>
+   </li>
+    {% endfor %}
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+ </div>
+
+
+{% endblock%}

@@ -7,7 +7,46 @@
     <title>WELCOME TO GAMEDRONE</title> 
     <meta name="description" content="gamedrone app">
     {% block customCSS %}{% endblock %}
+    <!--link rel="stylesheet" href="/css/bootstrap.min.css"/-->
     <link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/>
+    <style>
+      @media (max-width: 900px) {
+      .navbar-header {
+          float: none;
+      }
+      .navbar-left,.navbar-right {
+          float: none !important;
+      }
+      .navbar-toggle {
+          display: block;
+      }
+      .navbar-collapse {
+          border-top: 1px solid transparent;
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+      }
+      .navbar-fixed-top {
+          top: 0;
+          border-width: 0 0 1px;
+      }
+      .navbar-collapse.collapse {
+          display: none!important;
+      }
+      .navbar-nav {
+          float: none!important;
+          margin-top: 7.5px;
+      }
+      .navbar-nav>li {
+          float: none;
+      }
+      .navbar-nav>li>a {
+          padding-top: 10px;
+          padding-bottom: 10px;
+      }
+      .collapse.in{
+          display:block !important;
+      }
+    }
+  </style>
     
 </head>
 <body> 
@@ -57,7 +96,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand col-md-offset-4" href="/users/index">GameDrone</a>
+            <a class="navbar-brand col-md-offset-4" href="/users/index">GameDrone&nbsp;<sup style="color:#DC143C;">&beta;</sup></a>
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
@@ -66,21 +105,21 @@
             <ul class="nav navbar-nav">
               <li><a href="/latest" class="navbar-brand">Latest Contents</a></li>
               <li><a href="/sharers" class="navbar-brand">Sharers</a></li>
-              <li><a href="/about" class="navbar-brand">About</a></li>
+                <!--<li><a href="#">Link</a></li>-->
+              <li class="dropdown" class="navbar-brand">
+                <a href="#" class="dropdown-toggle navbar-brand" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Pages</a>
+                <ul class="dropdown-menu">
+                  <li><a href="/help" >Help</a></li>
+                  <li><a href="/about" >About</a></li>
+                  <!--li role="separator" class="divider"></li>
+                  <li><a href="/logout">Log out</a></li-->
+                </ul>
+              </li>
+              <!--li><a href="/about" class="navbar-brand">About</a></li-->
             </ul>
               </div>
-            <div class="col-md-offset-8">
-              <div class="nav navbar-nav ">
-              <form class="navbar-form " action="/search" >
-                <div class="form-group">
-                  <input type="text" class="form-control" name="title" placeholder="Search">
-                </div>
-                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
-              </form>
-              </div>
-            </div>
-            <div class="col-md-offset-10">
-            <ul class="nav navbar-nav">
+            <!--div class="col-md-offset-8"-->
+              <div class="nav navbar-nav navbar-right" style="margin-right:75px;">
                 <!--<li><a href="#">Link</a></li>-->
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> {{userdata.nick}} <span class="caret"></span></a>
@@ -91,16 +130,32 @@
                     <li><a href="/logout">Log out</a></li>
                   </ul>
                 </li>
-            </ul>
             </div>
+
+              <ul class="nav navbar-nav navbar-right" >
+              <form class="navbar-form " action="/search" >
+                <div class="form-group">
+                  <input type="text" class="form-control" name="title" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+              </form>
+              </ul>
+            <!--/div-->
+            <!--div class="col-md-offset-10"-->
+            
+            <!--/div-->
 
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
 </nav>
 
  {% block contents %}{% endblock %}
+ {% block customScripts% } {%endblock%}
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>   
+    <!--script src="/js/jquery-3.2.0.js"></script>
+    <script src="/js/bootstrap.min.js"></script-->  
 </body> 
 </html> 
     

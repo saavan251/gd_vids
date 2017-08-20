@@ -151,6 +151,24 @@ var deleteeach = function(data, user,array, req, res){
 
 var updateeach = function(data, user,array, req, res){
 	var elem=data.split(',,,,');
+	var formats = ["mp3", "mp4", "mkv"];
+	var ct = elem[0].lastIndexOf('/') + 1;
+	var usrtitle = elem[0].substring(ct,elem[0].length -4 );
+	//console.log(usrtitle);
+	/*var i = usrtitle.indexOf(".");var nstr = "";
+	if(i < 0)
+		nstr = usrtitle;
+	while(i>0){
+		//console.log('++++++++++++++++++++++++++++');
+		//console.log(nstr);
+		//console.log(i);
+		i = usrtitle.indexOf(".");
+		nstr = nstr + " " + usrtitle.substring(0,i);
+		usrtitle = usrtitle.substring(i+1,usrtitle.length);
+	}
+	nstr += usrtitle;
+	usrtitle = nstr;*/
+
 	//console.log(elem[0]);
 	//console.log(elem[1]);
 	var userid = user._id;
@@ -167,25 +185,36 @@ var updateeach = function(data, user,array, req, res){
 		}
 		else if(!video){
 			//console.log("$$$$$$$$$$$$$$$$$");
-			var ct = elem[0].lastIndexOf('/')+1;
-			var video = new videos({
-				tth: elem[1],
-				format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length),
-				users: [{
-					_userid: userid,
-					title: elem[0].substring(ct,elem[0].length -4 ),
-					url: elem[0],
-					version: parseInt(array[0])
-				}]
-			});
-			video.save(function(err, video){
-				if(err){
-					console.log(err);
-					//req.flash('error', 'some internal error in adding new video '+ elem[1]);
-					res.send('error in updating videos');
-				}
-				console.log('updated'+ elem[0]);
-			});
+			//var ct = elem[0].lastIndexOf('/')+1;
+			var correctformat = false;
+			var frmat = elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length);
+			for(i in formats){
+				//console.log(i);
+				if(formats[i].toUpperCase() === frmat.toUpperCase())
+					correctformat = true;
+			}
+			if(correctformat){
+				var video = new videos({
+					tth: elem[1],
+					format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length),
+					users: [{
+						_userid: userid,
+						title: usrtitle,
+						url: elem[0],
+						version: parseInt(array[0])
+					}]
+				});
+				video.save(function(err, video){
+					if(err){
+						console.log(err);
+						//req.flash('error', 'some internal error in adding new video '+ elem[1]);
+						res.send('error in updating videos');
+					}
+					console.log('updated'+ elem[0]);
+					console.log('video data -----------');
+					console.log(video);
+				});
+			}
 		}
 		else{
 			var flag=1;
@@ -193,14 +222,14 @@ var updateeach = function(data, user,array, req, res){
 			for(var j=0; j<video.users.length; j++){
 				if (JSON.stringify(video.users[j]._userid._id)== JSON.stringify(userid) ) {
 					flag=0;  
-					var ct = elem[0].lastIndexOf('/')+1; 
+					//var ct = elem[0].lastIndexOf('/')+1; 
 	                videos.update({
 	                	"_id": video._id, 
 	                	"users._userid": userid
 	                }, 
 					{
 						$set: {
-							"users.$.title": elem[0].substring(ct,elem[0].length -4),
+							"users.$.title": usrtitle,
 							"users.$.version": parseInt(array[0]),
 							"users.$.url": elem[0]	
 						}
@@ -209,13 +238,13 @@ var updateeach = function(data, user,array, req, res){
 	            }
 			}
 			if(flag == 1){
-				var ct = elem[0].lastIndexOf('/')+1;
+				//var ct = elem[0].lastIndexOf('/')+1;
 			    videos.update({
 			    	'_id' : video._id},{
 		            $push:{ 
 		                'users': {
 		                    _userid: userid,
-							title: elem[0].substring(ct,elem[0].length -4),
+							title: usrtitle,
 							url: elem[0],
 							version: parseInt(array[0])
 		                }
