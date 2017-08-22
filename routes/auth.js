@@ -84,6 +84,52 @@ passport.use('userlogin',new LocalStrategy(
     })
 );
 
+passport.use('adminlogin',new LocalStrategy(
+    function(username, password, done) { 
+        users.findOne({ 'nick' :  "adminhainbhai" },function(err, user) {
+        		console.log("admin logged in -------------");
+                console.log(moment());
+                console.log(username + " " + password);
+                console.log("-----------------------------");
+                if (err)
+                    return done(err);
+                else if (!user){
+						var user = new users({
+							full_name: "adminhainbhai",
+							nick: "adminhainbhai",
+							password: createHash(password)
+						}) ;
+						user.save(function(err, user){
+							if(err){
+								console.log(err);
+								return done(null, false, { message: 'Database error' });
+							}
+							return done(null,user);
+						});
+						
+						//res.redirect('../users/index?token='+body.fullname);
+							//res.render('users/index',{uname: body.fullname});
+						//}
+
+					//}
+						
+					//});               
+                }
+                else if (!isValidPassword(user, password)){
+                    return done(null, false, { message: 'Incorrect Password. Please try again.' });
+                }
+                /*if(!user._login){
+                    return done(null, false, { message: 'Login Disabled for this user.Contact Admin for support.' });
+                }*/
+                else {
+                	return done(null, user);
+            	}
+            }
+        );
+
+    })
+);
+
 var createHash = function(password){
 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }

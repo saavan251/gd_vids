@@ -197,6 +197,7 @@ var updateeach = function(data, user,array, req, res){
 				var video = new videos({
 					tth: elem[1],
 					format: elem[0].substring(elem[0].lastIndexOf('.')+1,elem[0].length),
+					isexplicit: elem[2],
 					users: [{
 						_userid: userid,
 						title: usrtitle,

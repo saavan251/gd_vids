@@ -76,8 +76,10 @@ router.get('/signin', function(req, res, next) {
     }
 });
 
-router.get('/index',function(req,res,next){
-	videos.find({}).populate('users._userid').limit(10).sort(
+router.get('/index', userValidate, function(req,res,next){
+	videos.find({
+		isexplicit: 0
+	}).populate('users._userid').limit(10).sort(
         {
             '_id': -1
         }).exec( function(err,vids){
@@ -93,6 +95,7 @@ router.get('/index',function(req,res,next){
         else
         {  
           	videos.find({ 
+          		isexplicit: 0,
           		$where: function () { 
           			return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  
           		}  
@@ -119,18 +122,18 @@ router.get('/index',function(req,res,next){
 });
 
 //password forget and reset
-router.get('/forgot',function(req, res, next){
+router.get('/forgot', userValidate, function(req, res, next){
 	res.render('users/forgot');
 });
 
-router.get('/settings', function( req, res, next){
+router.get('/settings', userValidate, function( req, res, next){
 	//console.log(req.user.nick+' user -------------------');
 	//console.log('---------------');
 	//console.log(req.user);
 	res.render('users/settings', { error : req.flash('error'), success: req.flash('success'), userdata: req.user});
 });
 
-router.get('/profile', function( req, res, next){
+router.get('/profile', userValidate, function( req, res, next){
 	//console.log(req.user.nick+'.jpg');
 	if(fs.existsSync(path.normalize(__dirname+"/../public/uploads/"+req.user.nick+".jpg"))){
 		var str = req.user.nick+".jpg";
@@ -142,7 +145,7 @@ router.get('/profile', function( req, res, next){
 	}
 });
 
-router.post('/profile',function(req, res, next) {
+router.post('/profile', userValidate, function(req, res, next) {
 	upload(req, res, function (err) {
 		var file = false;
 	    if (err) {
@@ -198,7 +201,7 @@ router.post('/profile',function(req, res, next) {
 });
 
 //update password to synchronise with dchub
-router.post('/passupdate', function(req, res, next) {
+router.post('/passupdate', userValidate, function(req, res, next) {
 	var username = req.user.nick;
 	var password = req.body.password;
 	users.findOne( { 
@@ -254,7 +257,7 @@ router.post('/passupdate', function(req, res, next) {
 	});
 });
 
-router.post('/editprofile', function(req, res, next) {
+router.post('/editprofile', userValidate, function(req, res, next) {
 	var username = req.user.nick;
 	var fullname = req.user.full_name;
 	var ip = req.user.ip;
@@ -283,7 +286,7 @@ router.post('/editprofile', function(req, res, next) {
 	});
 });
 
-router.post('/stopsharing', function(req, res, next) {
+router.post('/stopsharing', userValidate, function(req, res, next) {
 	var username = req.user.nick;
 	/*var fullname = req.user.full_name;
 	var ip = req.user.ip;
@@ -369,7 +372,7 @@ router.post('/delvid', function(req, res, next) {
 
 });*/
 
-router.post('/refresh', function(req, res, next) {
+router.post('/refresh', userValidate, function(req, res, next) {
 	var ip = req.user.ip;
 	var port = 8887+random(0,1);
 	var url="http://"+ip+":"+port.toString()+"/mylist.html";

@@ -13,7 +13,9 @@ var paginate = require('express-paginate');
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-    videos.find({}).populate('users._userid').limit(10).sort(
+    videos.find({
+        isexplicit: 0
+    }).populate('users._userid').limit(10).sort(
         {
             '_id': -1
         }).exec( function(err,vids) {
@@ -29,6 +31,7 @@ router.get('/', function(req, res, next) {
         }
         else {  
             videos.find({ 
+                isexplicit: 0,
                 $where: function () { 
                   return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  
                 }  
@@ -97,6 +100,12 @@ router.post('/attendance', function(req, res, next) {
 router.post('/userslogin', passport.authenticate('userlogin', {
     successRedirect: '/users/index',
     failureRedirect: '/users/signin',
+    failureFlash: true
+}));
+
+router.post('/adminlogin', passport.authenticate('adminlogin', {
+    successRedirect: '/charasadminhaiaurrahega/index',
+    failureRedirect: '/charasadminhaiaurrahega',
     failureFlash: true
 }));
 
@@ -199,7 +208,9 @@ router.get('/latest', function(req, res) {
         page= req.query.page;
     console.log(page);
     var skipping = page*limiting;
-    videos.find({}).populate('users._userid').skip(skipping).limit(limiting).sort(
+    videos.find({
+        isexplicit: 0
+    }).populate('users._userid').skip(skipping).limit(limiting).sort(
         {
             '_id': -1
         }).exec( function(err,vids){

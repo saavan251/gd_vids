@@ -25,6 +25,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var videos = require('./routes/videos');
 var update = require('./routes/update');
+var admin = require('./routes/admin');
 
 
 var app = express();
@@ -58,6 +59,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/videos', videos);
 app.use('/update', update);
+app.use('/charasadminhaiaurrahega', admin);
 
 
 

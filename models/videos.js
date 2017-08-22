@@ -17,6 +17,10 @@ var videoSchema = new Schema({
 		type: Number,
 		default : 0
 	},
+	isexplicit:{
+		type: Number,
+		default : 0
+	},
 	users:[{
 		_userid:{
 			type: Schema.Types.ObjectId,

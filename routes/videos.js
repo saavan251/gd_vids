@@ -56,6 +56,7 @@ router.get('/watch/:id', function(req, res, next) {
 		}
 		else{
 			videos.find({ 
+				isexplicit: 0,
 				$where: function () { 
 					return Date.now() - this._id.getTimestamp() < (7 * 24 * 60 * 60 * 1000)  
 				}  
