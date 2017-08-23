@@ -1,2 +1,129 @@
-<a href = "/logout">Log out</a>
-alksjdfalskdfjlsjf
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>WELCOME TO GAMEDRONE</title> 
+    <meta name="description" content="gamedrone app">
+     {% block customCSS %}{% endblock %}
+     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!--link rel="stylesheet" href="http://bootswatch.com/darkly/bootstrap.min.css"/-->
+      </style>
+    
+</head>
+<body>
+  <div class="container col-md-6" id="main-body" style="margin:4% auto;">
+	<form class="form-horizontal" action="/" method="post">
+      <fieldset>
+      	<div class="col-md-offset-3">
+        	<legend>Enter user nick to remove share</legend>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail" class="col-md-3 control-label">Username</label>
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="username" placeholder="Enter nick"> 
+          </div>
+        </div>
+        <div class="form-group">
+           <div class="message" style="margin: 1% auto; color: red;" >
+            	<center>{% if success.length>0 %}
+                {{success[0]}}
+                {% endif %}
+                {% if error.length>0 %}
+                {{error[0]}}
+                {% endif %}</center>
+          	</div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-3">
+            <button type="reset" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Delete all videos</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <form class="form-horizontal" action="/" method="post" style="margin-top:5%;">
+      <fieldset>
+      	<div class="col-md-offset-3">
+        	<legend>Enter user nick to ban user</legend>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail" class="col-md-3 control-label">Username</label>
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="username" placeholder="Enter nick"> 
+          </div>
+        </div>
+        <div class="form-group">
+           <div class="message" style="margin: 1% auto; color: red;" >
+            	<center>{% if success.length>0 %}
+                {{success[0]}}
+                {% endif %}
+                {% if error.length>0 %}
+                {{error[0]}}
+                {% endif %}</center>
+          	</div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-3">
+            <button type="reset" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Ban user</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <form class="form-horizontal" action="/" method="post" style="margin-top:5%;">
+      <fieldset>
+      	<div class="col-md-offset-3">
+        	<legend>Enter user nick to remove user ban</legend>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail" class="col-md-3 control-label">Username</label>
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="username" placeholder="Enter nick"> 
+          </div>
+        </div>
+        <div class="form-group">
+           <div class="message" style="margin: 1% auto; color: red;" >
+            	<center>{% if success.length>0 %}
+                {{success[0]}}
+                {% endif %}
+                {% if error.length>0 %}
+                {{error[0]}}
+                {% endif %}</center>
+          	</div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-3">
+            <button type="reset" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">UnBan user</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="container col-md-6" id="analytics" style="margin-top:10%;padding-left:10%;">
+    <h1 >
+    	Users Online : <strong id = "usr" style="color:green;font-size:75px;">{{usrcnt}}</strong>
+    </h1>
+    <form class="form-horizontal" action="/logout" style="margin-top:15%;">
+      <fieldset>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-1">
+            <button type="submit" class="btn btn-primary">Log Out</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <script src="/js/jquery-3.2.0.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>  
+	<script>  
+	   var socket = io();
+	   socket.on('updatedash', function(data){
+	   	document.getElementById("usr").innerHTML = data.usrcnt;
+	   });
+	</script>
+</body>
+</html>

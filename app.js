@@ -14,6 +14,7 @@ var fs = require('fs');
 var flash = require ('connect-flash');
 var mongoosesession = require('mongoose-session');
 var paginate = require('express-paginate');
+var socket_io = require('socket.io');
 mongoose.connect('mongodb://127.0.0.1/gamedrone');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -29,6 +30,8 @@ var admin = require('./routes/admin');
 
 
 var app = express();
+app.io = require('socket.io')();
+usrcnt = 0;
 
 // view engine setup- session collection name
 app.set('views', path.join(__dirname, 'views'));
@@ -79,6 +82,19 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+app.io.on('connection', function(socket){
+  usrcnt = usrcnt + 1;
+  console.log(socket.request.connection.remoteAddress + ' ----> connected');
+  console.log('number of users online --->' + usrcnt);
+  app.io.emit('updatedash',{usrcnt: usrcnt});
+  socket.on('disconnect', function(socket){
+    usrcnt = usrcnt - 1;
+    app.io.emit('updatedash',{usrcnt: usrcnt});
+    //console.log(socket.remoteAddress + ' ----> disconnected');
+    //console.log( 'just diconnected');
+  });
 });
 
 module.exports = app;

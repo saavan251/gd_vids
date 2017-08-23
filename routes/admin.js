@@ -27,7 +27,8 @@ router.use(function(req, res, next) {
 
 router.get('/index', function(req, res, next) {
 	//console.log('klsjdfslkaf');
-	res.render('admin/index');
+	console.log(usrcnt+" *-*---*-*-*-*-*-*-*-*--");
+	res.render('admin/index',{usrcnt : usrcnt});
 });
 
 function userValidate(req,res,next){

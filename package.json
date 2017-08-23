@@ -24,6 +24,7 @@
     "passport-local": "^1.0.0",
     "request": "^2.81.0",
     "serve-favicon": "~2.3.2",
+    "socket.io": "^2.0.3",
     "swig": "^1.4.2"
   }
 }
